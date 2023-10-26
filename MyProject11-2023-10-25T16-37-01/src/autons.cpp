@@ -1,4 +1,5 @@
 #include "vex.h"
+#include <cmath>
 
 void default_constants(){
   chassis.set_drive_constants(10, 1.5, 0, 10, 0);
@@ -9,6 +10,39 @@ void default_constants(){
   chassis.set_turn_exit_conditions(1, 300, 3000);
   chassis.set_swing_exit_conditions(1, 300, 3000);
 }
+
+void hunt_auto(){
+
+int turncons = 15;
+
+default_constants();
+ chassis.drive_max_voltage = 5;
+
+Vision21.takeSnapshot(Vision21__GO); 
+  double vis = 320-Vision21.objects[0].centerX;
+  while(vis > 25 || vis <-25){
+    
+    chassis.turn_to_angle(chassis.get_absolute_heading()+abs(vis)/vis*15);
+    Vision21.takeSnapshot(Vision21__GO); 
+    vis = 320/2-Vision21.objects[0].centerX;
+    Controller1.Screen.print(vis);
+    Controller1.Screen.newLine(); 
+  }
+
+  while(Vision21.objects[0].width < 200){
+    
+      chassis.drive_distance(4);
+       Vision21.takeSnapshot(Vision21__GO);
+    }
+  Intake.spin(forward,  100,percent);
+  chassis.drive_distance(5);
+  
+
+//chassis.turn_to_angle(10);
+//chassis.drive_distance(15);
+
+}
+
 
 void odom_constants(){
   default_constants();

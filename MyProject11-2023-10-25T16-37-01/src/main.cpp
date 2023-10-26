@@ -6,10 +6,16 @@
 // DriveL1              motor         1               
 // DriveL2              motor         2               
 // DriveL3              motor         3               
-// DriveR1              motor         4               
-// DriveR2              motor         5               
-// DriveR3              motor         6               
-// Inertial7            inertial      7               
+// DriveR1              motor         9               
+// DriveR2              motor         8               
+// DriveR3              motor         10              
+// Inertial6            inertial      6               
+// Controller1          controller                    
+// Wings                digital_out   H               
+// PunchMotor           motor         5               
+// Climb                digital_out   G               
+// Intake               motor_group   4, 7            
+// Vision21             vision        21              
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 using namespace vex;
@@ -38,7 +44,7 @@ Drive chassis(
 //Specify your drive setup below. There are seven options:
 //ZERO_TRACKER_NO_ODOM, ZERO_TRACKER_ODOM, TANK_ONE_ENCODER, TANK_ONE_ROTATION, TANK_TWO_ENCODER, TANK_TWO_ROTATION, HOLONOMIC_TWO_ENCODER, and HOLONOMIC_TWO_ROTATION
 //For example, if you are not using odometry, put ZERO_TRACKER_NO_ODOM below:
-ZERO_TRACKER_NO_ODOM,
+ZERO_TRACKER_ODOM,
 
 //Add the names of your Drive motors into the motor groups below, separated by commas, i.e. motor_group(Motor1,Motor2,Motor3).
 //You will input whatever motor names you chose when you configured your robot using the sidebar configurer, they don't have to be "Motor1" and "Motor2".
@@ -50,7 +56,7 @@ motor_group(DriveL1,DriveL2,DriveL3),
 motor_group(DriveR1,DriveR2,DriveR3),
 
 //Specify the PORT NUMBER of your inertial sensor, in PORT format (i.e. "PORT1", not simply "1"):
-PORT7,
+PORT6,
 
 //Input your wheel diameter. (4" omnis are actually closer to 4.125"):
 3.25,
@@ -58,7 +64,7 @@ PORT7,
 //External ratio, must be in decimal, in the format of input teeth/output teeth.
 //If your motor has an 84-tooth gear and your wheel has a 60-tooth gear, this value will be 1.4.
 //If the motor drives the wheel directly, this value is 1:
-0.6,
+0.66,
 
 //Gyro scale, this is what your gyro reads when you spin the robot 360 degrees.
 //For most cases 360 will do fine here, but this scale factor can be very helpful when precision is necessary.
@@ -92,7 +98,7 @@ PORT3,     -PORT4,
 //Input Forward Tracker center distance (a positive distance corresponds to a tracker on the right side of the robot, negative is left.)
 //For a zero tracker tank drive with odom, put the positive distance from the center of the robot to the right side of the drive.
 //This distance is in inches:
--2,
+4,
 
 //Input the Sideways Tracker Port, following the same steps as the Forward Tracker Port:
 1,
@@ -117,7 +123,7 @@ void pre_auton(void) {
     Brain.Screen.clearScreen();            //brain screen for auton selection.
     switch(current_auton_selection){       //Tap the brain screen to cycle through autons.
       case 0:
-        Brain.Screen.printAt(50, 50, "Drive Test");
+        Brain.Screen.printAt(50, 50, "Hunt Auto");
         break;
       case 1:
         Brain.Screen.printAt(50, 50, "Drive Test");
@@ -155,7 +161,8 @@ void autonomous(void) {
   auto_started = true;
   switch(current_auton_selection){  
     case 0:
-      drive_test(); //This is the default auton, if you don't select from the brain.
+    hunt_auto();
+       //This is the default auton, if you don't select from the brain.
       break;        //Change these to be your own auton functions in order to use the auton selector.
     case 1:         //Tap the screen to cycle through autons.
       drive_test();
@@ -206,7 +213,47 @@ void usercontrol(void) {
     //Replace this line with chassis.control_tank(); for tank drive 
     //or chassis.control_holonomic(); for holo drive.
     chassis.control_arcade();
+    Controller1.Screen.print(chassis.odom.X_position);
+    Controller1.Screen.print(" ");
+    Controller1.Screen.print(chassis.odom.Y_position);
+    Controller1.Screen.newLine();
+    /////USER DRIVE CODE BEGIN////
 
+    if(Controller1.ButtonR1.pressing()){
+      PunchMotor.spin(forward,100,percent);
+    }else{
+      PunchMotor.stop();
+    }
+
+    //Intake Code
+    if(Controller1.ButtonR2.pressing())
+    {
+      Intake.spin(forward,  100,percent);
+    }else if(Controller1.ButtonL2.pressing())
+    {
+      Intake.spin(reverse,100,percent);
+    }else
+    {
+      Intake.stop();
+    }
+    
+    //Pneumatic Wings
+     if(Controller1.ButtonL1.pressing())
+    {
+      Wings.set(true);
+      Intake.spin(reverse,100,percent);
+    }else{
+    Wings.set(false);
+    }
+
+    //Pneumatic Climb
+     if(Controller1.ButtonX.pressing())
+    {
+      Climb.set(true);
+    }else{
+      Climb.set(false);
+    }
+    
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
   }
