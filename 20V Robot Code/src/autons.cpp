@@ -13,7 +13,9 @@ void default_constants(){
 
 void hunt_auto(){
 
-  default_constants();
+chassis.set_coordinates(0,0,0);
+
+default_constants();
 
 //chassis.drive_distance(float distance, float heading, float drive_max_voltage, float heading_max_voltage, float drive_settle_error, float drive_settle_time, float drive_timeout, float drive_kp, float drive_ki, float drive_kd, float drive_starti, float heading_kp, float heading_ki, float heading_kd, float heading_starti)
 
@@ -26,13 +28,16 @@ chassis.drive_distance(-10,0,9,9);
 Wings.set(true);
 chassis.drive_distance(-10, 90, 9, 9);
 chassis.turn_to_point(0, 0);
-chassis.drive_to_point(0, 0);
-chassis.turn_to_angle(0);
+
+//chassis.drive_to_point(0, 0);
+
+
+/*chassis.turn_to_angle(0);
 
 chassis.drive_distance(30);
 chassis.turn_to_angle(90);
 
-
+//from here
 
 Vision21.takeSnapshot(Vision21__GO); 
   double vis = 320-Vision21.objects[0].centerX;
@@ -58,12 +63,11 @@ Vision21.takeSnapshot(Vision21__GO);
   wait(2, seconds);
   Intake.stop();
 
-/*
-
-cha
-
-
+  //to here
 */
+
+
+
 /*
 int turncons = 15;
 
