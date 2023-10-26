@@ -32,7 +32,7 @@ competition Competition;
 /*---------------------------------------------------------------------------*/
 
 /*---------------------------------------------------------------------------*/
-/*                             JAR-Template Config                           */
+/*                             JAR Config                           */
 /*                                                                           */
 /*  Where all the magic happens. Follow the instructions below to input      */
 /*  all the physical constants and values for your robot. You should         */
@@ -199,6 +199,7 @@ void autonomous(void) {
 /*---------------------------------------------------------------------------*/
 
 void usercontrol(void) {
+  chassis.set_coordinates(0,0,0);
   // User control code here, inside the loop
   while (1) {
     // This is the main execution loop for the user control program.
@@ -213,14 +214,15 @@ void usercontrol(void) {
     //Replace this line with chassis.control_tank(); for tank drive 
     //or chassis.control_holonomic(); for holo drive.
     chassis.control_arcade();
-    Controller1.Screen.print(chassis.odom.X_position);
+    
+    Controller1.Screen.print(chassis.get_X_position());
     Controller1.Screen.print(" ");
-    Controller1.Screen.print(chassis.odom.Y_position);
+    Controller1.Screen.print(chassis.get_Y_position());
     Controller1.Screen.newLine();
     /////USER DRIVE CODE BEGIN////
 
     if(Controller1.ButtonR1.pressing()){
-      PunchMotor.spin(forward,100,percent);
+      PunchMotor.spin(reverse, 10.5, volt);
     }else{
       PunchMotor.stop();
     }
@@ -228,7 +230,7 @@ void usercontrol(void) {
     //Intake Code
     if(Controller1.ButtonR2.pressing())
     {
-      Intake.spin(forward,  100,percent);
+      Intake.spin(forward,  75,percent);
     }else if(Controller1.ButtonL2.pressing())
     {
       Intake.spin(reverse,100,percent);
