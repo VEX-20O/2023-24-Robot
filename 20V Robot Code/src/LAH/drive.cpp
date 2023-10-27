@@ -1,35 +1,18 @@
 #include "vex.h"
 
-Drive::Drive(enum::drive_setup drive_setup, motor_group DriveL, motor_group DriveR, int gyro_port, float wheel_diameter, float wheel_ratio, float gyro_scale, int DriveLF_port, int DriveRF_port, int DriveLB_port, int DriveRB_port, int ForwardTracker_port, float ForwardTracker_diameter, float ForwardTracker_center_distance, int SidewaysTracker_port, float SidewaysTracker_diameter, float SidewaysTracker_center_distance) :
+Drive::Drive(enum::drive_setup drive_setup, motor_group DriveL, motor_group DriveR, int gyro_port, float wheel_diameter, float wheel_ratio, float gyro_scale, float ForwardTracker_center_distance) :
   wheel_diameter(wheel_diameter),
   wheel_ratio(wheel_ratio),
   gyro_scale(gyro_scale),
   drive_in_to_deg_ratio(wheel_ratio/360.0*M_PI*wheel_diameter),
   ForwardTracker_center_distance(ForwardTracker_center_distance),
-  ForwardTracker_diameter(ForwardTracker_diameter),
-  ForwardTracker_in_to_deg_ratio(M_PI*ForwardTracker_diameter/360.0),
-  SidewaysTracker_center_distance(SidewaysTracker_center_distance),
-  SidewaysTracker_diameter(SidewaysTracker_diameter),
-  SidewaysTracker_in_to_deg_ratio(M_PI*SidewaysTracker_diameter/360.0),
   drive_setup(drive_setup),
   DriveL(DriveL),
   DriveR(DriveR),
-  Gyro(inertial(gyro_port)),
-  DriveLF(DriveLF_port, is_reversed(DriveLF_port)),
-  DriveRF(DriveRF_port, is_reversed(DriveRF_port)),
-  DriveLB(DriveLB_port, is_reversed(DriveLB_port)),
-  DriveRB(DriveRB_port, is_reversed(DriveRB_port)),
-  R_ForwardTracker(ForwardTracker_port),
-  R_SidewaysTracker(SidewaysTracker_port),
-  E_ForwardTracker(ThreeWire.Port[to_port(ForwardTracker_port)]),
-  E_SidewaysTracker(ThreeWire.Port[to_port(SidewaysTracker_port)])
+  Gyro(inertial(gyro_port))
 {
   if (drive_setup != ZERO_TRACKER_NO_ODOM){
-    if (drive_setup == TANK_ONE_ENCODER || drive_setup == TANK_ONE_ROTATION || drive_setup == ZERO_TRACKER_ODOM){
-      odom.set_physical_distances(ForwardTracker_center_distance, 0);
-    } else {
-      odom.set_physical_distances(ForwardTracker_center_distance, SidewaysTracker_center_distance);
-    }
+    odom.set_physical_distances(ForwardTracker_center_distance, 0);
   }
 }
 
@@ -240,26 +223,14 @@ float Drive::get_ForwardTracker_position(){
   if (drive_setup==ZERO_TRACKER_ODOM){
     return(get_right_position_in());
   }
-  if (drive_setup==TANK_ONE_ENCODER || drive_setup == TANK_TWO_ENCODER || drive_setup == HOLONOMIC_TWO_ENCODER){
-    return(E_ForwardTracker.position(deg)*ForwardTracker_in_to_deg_ratio);
-  }else{
-    return(R_ForwardTracker.position(deg)*ForwardTracker_in_to_deg_ratio);
-  }
-}
-
-float Drive::get_SidewaysTracker_position(){
-  if (drive_setup==TANK_ONE_ENCODER || drive_setup == TANK_ONE_ROTATION || drive_setup == ZERO_TRACKER_ODOM){
-    return(0);
-  }else if (drive_setup == TANK_TWO_ENCODER || drive_setup == HOLONOMIC_TWO_ENCODER){
-    return(E_SidewaysTracker.position(deg)*SidewaysTracker_in_to_deg_ratio);
-  }else{
-    return(R_SidewaysTracker.position(deg)*SidewaysTracker_in_to_deg_ratio);
+  else{
+    return 0;
   }
 }
 
 void Drive::position_track(){
   while(1){
-    odom.update_position(get_ForwardTracker_position(), get_SidewaysTracker_position(), get_absolute_heading());
+    odom.update_position(get_ForwardTracker_position(), 0, get_absolute_heading());
     task::sleep(5);
   }
 }
@@ -269,7 +240,7 @@ void Drive::set_heading(float orientation_deg){
 }
 
 void Drive::set_coordinates(float X_position, float Y_position, float orientation_deg){
-  odom.set_position(X_position, Y_position, orientation_deg, get_ForwardTracker_position(), get_SidewaysTracker_position());
+  odom.set_position(X_position, Y_position, orientation_deg, get_ForwardTracker_position(), 0);
   set_heading(orientation_deg);
   odom_task = task(position_track_task);
 }

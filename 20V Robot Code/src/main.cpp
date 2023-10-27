@@ -40,28 +40,9 @@ PORT6,
 //gyro 
 360,
 
-//ONLY need to adjust the FORWARD TRACKER CENTER DISTANCE.
-
-//Leave this alone
-//LF:      //RF:    
-PORT1,     -PORT2,
-
-//LB:      //RB: 
-PORT3,     -PORT4,
-
-3,
-
-2.75,
-
 //For a zero tracker tank drive with odom, put the positive distance from the center of the robot to the right side of the drive.
 //This distance is in inches:
-4,
-
-1,
-
--2.75,
-
-5.5
+4
 
 );
 

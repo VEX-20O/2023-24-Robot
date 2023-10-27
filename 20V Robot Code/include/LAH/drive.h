@@ -1,7 +1,7 @@
 #pragma once
 #include "vex.h"
 
-enum drive_setup {ZERO_TRACKER_NO_ODOM, ZERO_TRACKER_ODOM, TANK_ONE_ENCODER, TANK_ONE_ROTATION, TANK_TWO_ENCODER, TANK_TWO_ROTATION, HOLONOMIC_TWO_ENCODER, HOLONOMIC_TWO_ROTATION};
+enum drive_setup {ZERO_TRACKER_NO_ODOM, ZERO_TRACKER_ODOM};
 
 class Drive
 {
@@ -11,26 +11,13 @@ private:
   float gyro_scale;
   float drive_in_to_deg_ratio;
   float ForwardTracker_center_distance;
-  float ForwardTracker_diameter;
-  float ForwardTracker_in_to_deg_ratio;
-  float SidewaysTracker_center_distance;
-  float SidewaysTracker_diameter;
-  float SidewaysTracker_in_to_deg_ratio;
   vex:: triport ThreeWire = vex::triport(vex::PORT22);
 
 public: 
-  drive_setup drive_setup = ZERO_TRACKER_NO_ODOM;
+  drive_setup drive_setup = ZERO_TRACKER_ODOM;
   motor_group DriveL;
   motor_group DriveR;
   inertial Gyro;
-  motor DriveLF;
-  motor DriveRF;
-  motor DriveLB;
-  motor DriveRB;
-  rotation R_ForwardTracker;
-  rotation R_SidewaysTracker;
-  encoder E_ForwardTracker;
-  encoder E_SidewaysTracker;
 
   float turn_max_voltage;
   float turn_kp;
@@ -70,7 +57,7 @@ public:
   
   float desired_heading;
 
-  Drive(enum::drive_setup drive_setup, motor_group DriveL, motor_group DriveR, int gyro_port, float wheel_diameter, float wheel_ratio, float gyro_scale, int DriveLF_port, int DriveRF_port, int DriveLB_port, int DriveRB_port, int ForwardTracker_port, float ForwardTracker_diameter, float ForwardTracker_center_distance, int SidewaysTracker_port, float SidewaysTracker_diameter, float SidewaysTracker_center_distance);
+  Drive(enum::drive_setup drive_setup, motor_group DriveL, motor_group DriveR, int gyro_port, float wheel_diameter, float wheel_ratio, float gyro_scale, float ForwardTracker_center_distance);
 
   void drive_with_voltage(float leftVoltage, float rightVoltage);
 
