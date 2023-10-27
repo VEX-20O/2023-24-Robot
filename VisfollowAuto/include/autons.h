@@ -8,8 +8,7 @@ extern Drive chassis;
 void default_constants();
 
 
-void OppSide_Desc();
-void SameSide_Score();
+void hunt_auto();
 
 void drive_test();
 void turn_test();

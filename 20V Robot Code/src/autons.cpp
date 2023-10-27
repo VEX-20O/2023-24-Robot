@@ -1,6 +1,56 @@
 #include "vex.h"
 #include <cmath>
 
+void VisionChase(){
+  Vision21.takeSnapshot(Vision21__GO); 
+  if(Vision21.objects[0].exists){
+  while (1) {
+Vision21.takeSnapshot(Vision21__GO); 
+
+    bool aligned1=true;
+    
+  if(Controller1.ButtonY.pressing()){
+    break;
+  }
+
+  float kdp = 0.22;
+  
+  double visE = 316/2-Vision21.objects[0].centerX;
+  double turnL = 0;
+  double turnR = 0;
+
+  if(visE > 50 || visE <-50){
+    turnR-=visE*kdp;
+    turnL+=visE*kdp;
+    aligned1=false;
+  }
+  int vish=Vision21.objects[0].height - 115;
+  if(Vision21.objects[0].height > 130 || Vision21.objects[0].height < 100){
+    turnR+= vish*-0.55;
+    turnL+= vish*-0.55;
+    aligned1=false;
+  }
+
+  DriveL1.spin(forward,turnL,percent);
+  DriveL2.spin(forward,turnL,percent);
+  DriveL3.spin(forward,turnL,percent);
+  DriveR1.spin(forward,turnR,percent);
+  DriveR2.spin(forward,turnR,percent);
+  DriveR3.spin(forward,turnR,percent);
+
+  Controller1.Screen.print(aligned1);
+  Controller1.Screen.newLine();
+
+  if(aligned1){
+    Intake.spin(forward,100, percent);    
+    chassis.drive_distance(15,chassis.get_absolute_heading(),6,6);
+    Intake.stop(brake);
+    return;
+  }
+  }
+  }
+}
+
 void default_constants(){
   chassis.set_drive_constants(10, 1.5, 0, 10, 0);
   chassis.set_heading_constants(6, .4, 0, 1, 0);
@@ -11,94 +61,55 @@ void default_constants(){
   chassis.set_swing_exit_conditions(1, 300, 3000);
 }
 
-void hunt_auto(){
+void OppSide_Desc(){
+ chassis.set_coordinates(0, 0, 315);
+  Wings.set(true);
+chassis.drive_dis_half_speed(9, 90, 11, 0.4, false);
+ // chassis.set_coordinates(0, 0, 305);
+ 
+  //chassis.left_swing_to_angle(0, 11);
+  Wings.set(false);
+   
+   chassis.turn_to_angle(65);
+  PunchMotor.setVelocity(100, percent);
+  PunchMotor.spinFor(forward, -2.938, turns);
 
-chassis.set_coordinates(0,0,0);
+//add dump over
 
-default_constants();
+  chassis.drive_distance(15, 60, 6, 6);
+  //chassis.turn_to_point(0, 0);
+  chassis.drive_to_point(0, -2);
+  chassis.turn_to_angle(135);
+  chassis.drive_distance(15);
+  chassis.turn_to_angle(90);
+  chassis.drive_distance(10);
+}
 
-//chassis.drive_distance(float distance, float heading, float drive_max_voltage, float heading_max_voltage, float drive_settle_error, float drive_settle_time, float drive_timeout, float drive_kp, float drive_ki, float drive_kd, float drive_starti, float heading_kp, float heading_ki, float heading_kd, float heading_starti)
-
-Intake.spin(forward,9,volt);
-chassis.drive_distance(30, 0, 11, 11);
-Intake.stop();
-chassis.drive_distance(-15, 0, 9, 9);
-chassis.turn_to_angle(45);
-chassis.drive_distance(-10,0,9,9);
-Wings.set(true);
-chassis.drive_distance(-10, 90, 9, 9);
-chassis.turn_to_point(0, 0);
-
-//chassis.drive_to_point(0, 0);
-
-
-/*chassis.turn_to_angle(0);
-
-chassis.drive_distance(30);
-chassis.turn_to_angle(90);
-
-//from here
-
-Vision21.takeSnapshot(Vision21__GO); 
-  double vis = 320-Vision21.objects[0].centerX;
-  while(vis > 25 || vis <-25){
-    
-    chassis.turn_to_angle(chassis.get_absolute_heading()+abs(vis)/vis*15);
-    Vision21.takeSnapshot(Vision21__GO); 
-    vis = 320/2-Vision21.objects[0].centerX;
-  }
-
-  while(Vision21.objects[0].width < 200){
-      chassis.drive_distance(4);
-       Vision21.takeSnapshot(Vision21__GO);
-    }
-
-  Intake.spin(forward,  100,percent);
+void SameSide_Score(){
+  chassis.set_coordinates(0, 0, 270);
+  //VisionChase();
+  chassis.drive_distance(-10);
   chassis.drive_distance(5);
+  chassis.turn_to_angle(90);
+  chassis.drive_distance(15);
+  Wings.set(true);
+  chassis.drive_dis_half_speed(9, 0, 11, 0.4, true);
+  Intake.spin(reverse,60,percent);
+  chassis.drive_distance(15);
+  Wings.set(false);
+   Intake.stop();
+
+  //add in 180 degree push if needed
+
+  chassis.turn_to_angle(270);
+  chassis.drive_distance(10);
+  VisionChase();
   
-  Intake.stop();
-  chassis.turn_to_angle(180);
-  chassis.drive_to_point(float X_position, float Y_position);
-  Intake.spin(reverse, 10, volt);
-  wait(2, seconds);
-  Intake.stop();
+  chassis.drive_distance(-5);
+  chassis.turn_to_angle(90);
+  chassis.drive_distance(15);
+  Intake.spin(reverse,100, percent);
 
-  //to here
-*/
-
-
-
-/*
-int turncons = 15;
-
-default_constants();
- chassis.drive_max_voltage = 5;
-
-Vision21.takeSnapshot(Vision21__GO); 
-  double vis = 320-Vision21.objects[0].centerX;
-  while(vis > 25 || vis <-25){
-    
-    chassis.turn_to_angle(chassis.get_absolute_heading()+abs(vis)/vis*15);
-    Vision21.takeSnapshot(Vision21__GO); 
-    vis = 320/2-Vision21.objects[0].centerX;
-    Controller1.Screen.print(vis);
-    Controller1.Screen.newLine(); 
-  }
-
-  while(Vision21.objects[0].width < 200){
-    
-      chassis.drive_distance(4);
-       Vision21.takeSnapshot(Vision21__GO);
-    }
-  Intake.spin(forward,  100,percent);
-  chassis.drive_distance(5);
-  
-
-//chassis.turn_to_angle(10);
-//chassis.drive_distance(15);
-
-
-*/
 }
 
 void odom_constants(){
@@ -156,13 +167,4 @@ void tank_odom_test(){
   chassis.drive_to_point(24,24);
   chassis.drive_to_point(0,0);
   chassis.turn_to_angle(0);
-}
-
-void holonomic_odom_test(){
-  odom_constants();
-  chassis.set_coordinates(0, 0, 0);
-  chassis.holonomic_drive_to_point(0, 18, 90);
-  chassis.holonomic_drive_to_point(18, 0, 180);
-  chassis.holonomic_drive_to_point(0, 18, 270);
-  chassis.holonomic_drive_to_point(0, 0, 0);
 }

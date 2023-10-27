@@ -114,62 +114,14 @@ PORT3,     -PORT4,
 int current_auton_selection = 0;
 bool auto_started = false;
 
-void ToggleClimb();
-
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   default_constants();
-
-  while(auto_started == false){            //Changing the names below will only change their names on the
-    Brain.Screen.clearScreen();            //brain screen for auton selection.
-    switch(current_auton_selection){       //Tap the brain screen to cycle through autons.
-      case 0:
-        Brain.Screen.printAt(50, 50, "Opp Desc");
-        break;
-      case 1:
-        Brain.Screen.printAt(50, 50, "Same Score");
-        break;
-      case 2:
-        Brain.Screen.printAt(50, 50, "Turn Test");
-        break;
-      case 3:
-        Brain.Screen.printAt(50, 50, "Swing Test");
-        break;
-      case 4:
-        Brain.Screen.printAt(50, 50, "Odom Test");
-        break;
-    }
-    if(Brain.Screen.pressing()){
-      while(Brain.Screen.pressing()) {}
-      current_auton_selection ++;
-    } else if (current_auton_selection == 4){
-      current_auton_selection = 0;
-    }
-    task::sleep(10);
-  }
 }
 
 void autonomous(void) {
-  auto_started = true;
-  switch(current_auton_selection){  
-    case 0:
-    SameSide_Score();
-       //This is the default auton, if you don't select from the brain.
-      break;        //Change these to be your own auton functions in order to use the auton selector.
-    case 1:         //Tap the screen to cycle through autons.
-      OppSide_Desc();
-      break;
-    case 2:
-      turn_test();
-      break;
-    case 3:
-      swing_test();
-      break;
-    case 4:
-      odom_test();
-      break;
- }
+ 
 }
 
 /*---------------------------------------------------------------------------*/
@@ -184,60 +136,52 @@ void autonomous(void) {
 
 void usercontrol(void) {
   chassis.set_coordinates(0,0,0);
-  Controller1.ButtonX.pressed(ToggleClimb);
+  
   // User control code here, inside the loop
   while (1) {
-    // This is the main execution loop for the user control program.
-    // Each time through the loop your program should update motor + servo
-    // values based on feedback from the joysticks.
-
-    // ........................................................................
-    // Insert user code here. This is where you use the joystick values to
-    // update your motors, etc.
-    // ........................................................................
-
-    //Replace this line with chassis.control_tank(); for tank drive 
-    //or chassis.control_holonomic(); for holo drive.
-    chassis.control_arcade();
+    bool aligned1=true;
     
-    Controller1.Screen.print(chassis.get_X_position());
-    Controller1.Screen.print(" ");
-    Controller1.Screen.print(chassis.get_Y_position());
-    Controller1.Screen.newLine();
-    /////USER DRIVE CODE BEGIN////
-
-    if(Controller1.ButtonR1.pressing()){
-      PunchMotor.spin(reverse, 10.5, volt);
-    }else{
-      PunchMotor.stop();
-    }
-
-    //Intake Code
-    if(Controller1.ButtonR2.pressing()){
-      Intake.spin(forward,75,percent);
-    }
-    else if(Controller1.ButtonL2.pressing()){
-      Intake.spin(reverse,100,percent);
-    }
-    else{
-      Intake.stop();
-    }
-    
-    //Pneumatic Wings
-    if(Controller1.ButtonL1.pressing())
-    {
-      Wings.set(true);
-      Intake.spin(reverse,100,percent);
-    }
-    else{
-      Wings.set(false);
-    }
-    
-    wait(20, msec); // Sleep the task for a short amount of time to
-                    // prevent wasted resources.
+  if(Controller1.ButtonY.pressing()){
+    break;
   }
-}
 
+  float kdp = 0.22;
+  Vision21.takeSnapshot(Vision21__GO); 
+  double visE = 316/2-Vision21.objects[0].centerX;
+  double turnL = 0;
+  double turnR = 0;
+
+  if(visE > 50 || visE <-50){
+    turnR-=visE*kdp;
+    turnL+=visE*kdp;
+    aligned1=false;
+  }
+  int vish=Vision21.objects[0].height - 115;
+  if(Vision21.objects[0].height > 130 || Vision21.objects[0].height < 100){
+    turnR+= vish*-0.55;
+    turnL+= vish*-0.55;
+    aligned1=false;
+  }
+
+  DriveL1.spin(forward,turnL,percent);
+  DriveL2.spin(forward,turnL,percent);
+  DriveL3.spin(forward,turnL,percent);
+  DriveR1.spin(forward,turnR,percent);
+  DriveR2.spin(forward,turnR,percent);
+  DriveR3.spin(forward,turnR,percent);
+  Controller1.Screen.print(aligned1);
+  Controller1.Screen.newLine();
+  if(aligned1 && Controller1.ButtonB.pressing()){
+    Intake.spin(forward,80, percent);    
+    chassis.drive_distance(18);
+    break;
+  }
+  else{
+    Intake.stop();
+  }
+
+}
+}
 //
 // Main will set up the competition functions and callbacks.
 //
@@ -253,8 +197,4 @@ int main() {
   while (true) {
     wait(100, msec);
   }
-}
-
-void ToggleClimb(){
-  Climb.set(!Climb.value());
 }

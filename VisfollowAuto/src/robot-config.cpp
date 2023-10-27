@@ -23,8 +23,8 @@ motor IntakeMotorA = motor(PORT4, ratio18_1, true);
 motor IntakeMotorB = motor(PORT7, ratio18_1, false);
 motor_group Intake = motor_group(IntakeMotorA, IntakeMotorB);
 /*vex-vision-config:begin*/
-signature Vision21__GO = signature (1, -4871, -2153, -3512, -8903, -6401, -7652, 2.5, 0);
-vision Vision21 = vision (PORT21, 62, Vision21__GO);
+signature Vision21__GO = signature (1, -7169, -4865, -6018, -6847, -4991, -5918, 2.5, 0);
+vision Vision21 = vision (PORT21, 71, Vision21__GO);
 /*vex-vision-config:end*/
 
 // VEXcode generated functions
