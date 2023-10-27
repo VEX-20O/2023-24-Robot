@@ -1,9 +1,9 @@
 /*----------------------------------------------------------------------------*/
 /*                                                                            */
-/*    Module:       vex.h                                                     */
-/*    Author:       Vex Robotics                                              */
-/*    Created:      1 Feb 2019                                                */
-/*    Description:  Default header for V5 projects                            */
+/*    Program:      20V Over Under 2023-34 Code                               */
+/*    Author:       Eric Lind                                                 */
+/*    Created:      10/13/23                                                  */
+/*    Description:  ...                                                       */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 //
