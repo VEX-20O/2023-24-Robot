@@ -62,25 +62,25 @@ void pre_auton(void) {
         Brain.Screen.printAt(50, 50, "Offensive Score 3");
         break;
       case 1:
-        Brain.Screen.printAt(50, 50, "Opposite Descore Shoot Touch");
+        Brain.Screen.printAt(50, 50, "Opposite Score Pre & Desc & Touch");
         break;
       case 2:
         Brain.Screen.printAt(50, 50, "DO NOTHING!");
         break;
       case 3:
-        Brain.Screen.printAt(50, 50, "Opposite Shoot 2");
+        Brain.Screen.printAt(50, 50, "Desc & Opposite Shoot 2");
         break;
       case 4:
         Brain.Screen.printAt(50, 50, "Offensive Score 2 Touch");
         break;
       case 5:
-        Brain.Screen.printAt(50, 50, "Opposite Descore & Score Pre");
+        Brain.Screen.printAt(50, 50, "Opposite Descore & Score Pre & Touch (brings 1>)");
         break;
     }
     if(Brain.Screen.pressing()){
       while(Brain.Screen.pressing()) {}
       current_auton_selection ++;
-    } else if (current_auton_selection == 4){
+    } else if (current_auton_selection == 5){
       current_auton_selection = 0;
     }
     task::sleep(10);
