@@ -228,10 +228,11 @@ void OppSide_Desc_Score_Score(){
    chassis.drive_distance(7);
    chassis.turn_to_angle(135);
    chassis.drive_distance(-10);
-  chassis.drive_distance(27, 90, 11, 5);
+   chassis.drive_distance(3);
+  chassis.drive_distance(29, 90, 11, 5);
   Wings.set(true);
   
-  chassis.drive_distance(23);
+  chassis.drive_distance(18);
    //bool didsee = VisionChase();
     
     //chassis.turn_to_angle(90);
@@ -280,7 +281,7 @@ void SameSide_Score(){
   VisionChase1(2);
   chassis.drive_distance(-10);
   Wings.set(true);
-  chassis.drive_distance(40,80,12,12,chassis.drive_settle_error,0,1000);
+  chassis.drive_distance(40,80,12,12,chassis.drive_settle_error,0,1500);
   Intake.spin(reverse,100,percent);
   chassis.drive_distance(10);
 
