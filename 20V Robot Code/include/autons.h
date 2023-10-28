@@ -7,9 +7,12 @@ extern Drive chassis;
 
 void default_constants();
 
-
-void OppSide_Desc();
+void OppSide_Desc_Mid();
+void Opp_WP();
+void OppSide_Desc_Score();
 void SameSide_Score();
+void SameSide_NoMid();
+void Sit();
 
 void drive_test();
 void turn_test();

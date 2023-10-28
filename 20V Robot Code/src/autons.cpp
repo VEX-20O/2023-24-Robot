@@ -1,54 +1,57 @@
 #include "vex.h"
 #include <cmath>
 
-void VisionChase(){
+bool VisionChase(float sp){
   Vision21.takeSnapshot(Vision21__GO); 
   if(Vision21.objects[0].exists){
-  while (1) {
-Vision21.takeSnapshot(Vision21__GO); 
+    Controller1.Screen.print("A");
+    if (Vision21.objects[0].height < 40){
+      Controller1.Screen.print("B");
+      return false;
+    }
+    while (1) {
+      Controller1.Screen.print("C");
+      bool aligned1=true;
+      Vision21.takeSnapshot(Vision21__GO); 
 
-    bool aligned1=true;
-    
-  if(Controller1.ButtonY.pressing()){
-    break;
-  }
+      float kdp = 0.22;
+      double visXerr = v_screen_width/2.0-Vision21.objects[0].centerX;
+      int visHerr=Vision21.objects[0].height - 115;
+      double turnL = 0;
+      double turnR = 0;
 
-  float kdp = 0.22;
-  
-  double visE = 316/2-Vision21.objects[0].centerX;
-  double turnL = 0;
-  double turnR = 0;
+      if(visXerr > 50 || visXerr <-50){
+        turnR-=visXerr*kdp;
+        turnL+=visXerr*kdp;
+        aligned1=false;
+      }
 
-  if(visE > 50 || visE <-50){
-    turnR-=visE*kdp;
-    turnL+=visE*kdp;
-    aligned1=false;
-  }
-  int vish=Vision21.objects[0].height - 115;
-  if(Vision21.objects[0].height > 130 || Vision21.objects[0].height < 100){
-    turnR+= vish*-0.55;
-    turnL+= vish*-0.55;
-    aligned1=false;
-  }
+      if(Vision21.objects[0].height > 130 || Vision21.objects[0].height < 100){
+        turnR+= visHerr*-0.55;
+        turnL+= visHerr*-0.55;
+        aligned1=false;
+      }
 
-  DriveL1.spin(forward,turnL,percent);
-  DriveL2.spin(forward,turnL,percent);
-  DriveL3.spin(forward,turnL,percent);
-  DriveR1.spin(forward,turnR,percent);
-  DriveR2.spin(forward,turnR,percent);
-  DriveR3.spin(forward,turnR,percent);
+      DriveL1.spin(forward,turnL*sp,percent);
+      DriveL2.spin(forward,turnL*sp,percent);
+      DriveL3.spin(forward,turnL*sp,percent);
+      DriveR1.spin(forward,turnR*sp,percent);
+      DriveR2.spin(forward,turnR*sp,percent);
+      DriveR3.spin(forward,turnR*sp,percent);
 
-  Controller1.Screen.print(aligned1);
-  Controller1.Screen.newLine();
+      Controller1.Screen.print(aligned1);
+      Controller1.Screen.newLine();
 
-  if(aligned1){
-    Intake.spin(forward,100, percent);    
-    chassis.drive_distance(15,chassis.get_absolute_heading(),6,6);
-    Intake.stop(brake);
-    return;
+      if(aligned1){
+        Intake.spin(forward,100, percent);    
+        chassis.drive_distance(6,chassis.get_absolute_heading(),3,3);
+        Intake.stop(brake);
+        return true;
+      }
+    }
   }
-  }
-  }
+  Controller1.Screen.print("D");
+    return(false);
 }
 
 void default_constants(){
@@ -61,49 +64,145 @@ void default_constants(){
   chassis.set_swing_exit_conditions(1, 300, 3000);
 }
 
-void OppSide_Desc(){
- chassis.set_coordinates(0, 0, 315);
+void OppSide_Desc_Mid(){
+
+  chassis.set_coordinates(0, 0, 315);
+
+  chassis.drive_distance(8);
+
   Wings.set(true);
-chassis.drive_dis_half_speed(9, 90, 11, 0.4, false);
- // chassis.set_coordinates(0, 0, 305);
- 
-  //chassis.left_swing_to_angle(0, 11);
+  chassis.swing_speed_scalar(9, 90, 4, 0.5, false);
+
   Wings.set(false);
-   
-   chassis.turn_to_angle(65);
+  
+        
+
+  chassis.turn_to_angle(65,12);
+
+PunchMotor.setVelocity(100, percent);
+  PunchMotor.spinFor(forward, -2.938, turns);
+  
+  chassis.swing_speed_scalar(45, 20, 12, 1, false);
+
+  Vision21.takeSnapshot(Vision21__GO);
+  if(Vision21.objects[0].exists&&Vision21.objects[0].height > 50){
+    Intake.spin(forward,100,percent);
+      chassis.drive_distance(9);
+      wait(0.4, sec);
+      Intake.stop();
+      chassis.right_swing_to_angle(90,chassis.swing_max_voltage,chassis.swing_settle_error,chassis.swing_settle_time,600,chassis.swing_kp,chassis.swing_ki,chassis.swing_kd,chassis.swing_starti);
+      
+     
+      chassis.drive_distance(33,90,12,chassis.heading_max_voltage,chassis.drive_settle_error,chassis.drive_settle_time,1300);      
+       Intake.spin(reverse, 100, percent);
+      wait(0.3, seconds);
+      Intake.stop();
+      chassis.drive_distance(-4);
+           chassis.left_swing_to_angle(0,chassis.swing_max_voltage,chassis.swing_settle_error,chassis.swing_settle_time,600,chassis.swing_kp,chassis.swing_ki,chassis.swing_kd,chassis.swing_starti);
+
+     chassis.drive_distance(16,350,12,chassis.heading_max_voltage,chassis.drive_settle_error,chassis.drive_settle_time,2000);
+     Wings.set(true);
+     chassis.drive_distance(-6);
+     
+      
+  
+
+      }
+}
+
+void Opp_WP(){
+chassis.set_coordinates(0, 0, 315);
+
+  Wings.set(true);
+  chassis.swing_speed_scalar(9, 90, 4, 0.5, false);
+
+  Wings.set(false);
+
+  chassis.turn_to_angle(65);
+
   PunchMotor.setVelocity(100, percent);
   PunchMotor.spinFor(forward, -2.938, turns);
+  
 
-//add dump over
+  chassis.set_drive_constants(12, 1.5, 0, 10, 0);
+  
+  chassis.turn_to_point(0,0);
+  chassis.drive_to_point(6, -8.5);
+    Controller1.Screen.print(chassis.odom.X_position);
+      Controller1.Screen.print(" ");
+   Controller1.Screen.print(chassis.odom.Y_position);
+   chassis.turn_to_angle(90);
+  chassis.drive_distance(45);  
 
-  chassis.drive_distance(15, 60, 6, 6);
-  //chassis.turn_to_point(0, 0);
-  chassis.drive_to_point(0, -2);
-  chassis.turn_to_angle(135);
-  chassis.drive_distance(15);
-  chassis.turn_to_angle(90);
-  chassis.drive_distance(10);
+
+}
+
+void OppSide_Desc_Score(){
+  chassis.set_coordinates(0, 0, 0);
+
+  
+  chassis.set_drive_constants(12, 4, 0, 20, 0);
+  chassis.swing_speed_scalar(25, 315, 12, 0.5, true);
+  chassis.swing_speed_scalar(15, 0, 12, 0.5, false);
+ 
+  Intake.spin(reverse,100,percent);
+  wait(0.5,seconds);
+  Intake.stop();
+  chassis.set_coordinates(0, 0, chassis.get_absolute_heading());
+   chassis.drive_distance(2);
+  chassis.drive_distance(-2);
+  chassis.swing_speed_scalar(-25, 315, 6.5, 0.35, true);
+  wait(1,sec);
+  Wings.set(true);
+   chassis.swing_speed_scalar(-15, 270, 12, 0.1, false);
+   Wings.set(false);
+   chassis.drive_distance(7);
+   chassis.turn_to_angle(135);
+   chassis.drive_distance(-10);
+  chassis.drive_distance(23, 90, 11, 5);
+  
+  chassis.drive_distance(40);
+   //bool didsee = VisionChase();
+    
+    //chassis.turn_to_angle(90);
+    //chassis.drive_distance(50);
+  /*chassis.drive_to_point(16, -16);
+  Wings.set(true);
+  chassis.swing_speed_scalar(15, 0, 12, 0.75, false);
+  Wings.set(false);
+  // chassis.turn_to_angle(270);
+  chassis.drive_distance(-15, 290,7,7);
+ 
+  VisionChase();*/
+   /*
+  Controller1.Screen.print(chassis.get_absolute_heading());
+
+  
+  chassis.drive_to_point(2, 5);
+  //chassis.set_drive_constants(12, 1.5, 0, 10, 0);
+  */
+
 }
 
 void SameSide_Score(){
   chassis.set_coordinates(0, 0, 270);
-  //VisionChase();
+  bool a = VisionChase(1);
   chassis.drive_distance(-10);
   chassis.drive_distance(5);
   chassis.turn_to_angle(90);
   chassis.drive_distance(15);
   Wings.set(true);
-  chassis.drive_dis_half_speed(9, 0, 11, 0.4, true);
+  chassis.swing_speed_scalar(9, 0, 11, 0.4, true);
   Intake.spin(reverse,60,percent);
   chassis.drive_distance(15);
   Wings.set(false);
-   Intake.stop();
+  Intake.stop();
 
   //add in 180 degree push if needed
 
   chassis.turn_to_angle(270);
   chassis.drive_distance(10);
-  VisionChase();
+  bool b = VisionChase(1);
   
   chassis.drive_distance(-5);
   chassis.turn_to_angle(90);
@@ -111,6 +210,12 @@ void SameSide_Score(){
   Intake.spin(reverse,100, percent);
 
 }
+
+void SameSide_NoMid(){
+  
+}
+
+void Sit(){}
 
 void odom_constants(){
   default_constants();
@@ -166,3 +271,4 @@ void tank_odom_test(){
   chassis.drive_to_point(0,0);
   chassis.turn_to_angle(0);
 }
+

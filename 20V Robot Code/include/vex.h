@@ -24,6 +24,11 @@
 #include "LAH/PID.h"
 #include "autons.h"
 
+const int   v_screen_origin_x = 150;
+const int   v_screen_origin_y = 20;
+const int   v_screen_width    = 316;
+const int   v_screen_height   = 212;
+
 #define waitUntil(condition)                                                   \
   do {                                                                         \
     wait(5, msec);                                                             \

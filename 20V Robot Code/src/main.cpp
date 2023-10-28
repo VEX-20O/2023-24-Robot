@@ -34,16 +34,15 @@ PORT6,
 //Wheel Dia
 3.25,
 
-//External ratio (in/out)
+//External drive gear ratio (in/out)
 0.66,
 
-//gyro 
+//gyro degrees
 360,
 
 //For a zero tracker tank drive with odom, put the positive distance from the center of the robot to the right side of the drive.
 //This distance is in inches:
 4
-
 );
 
 int current_auton_selection = 0;
@@ -60,19 +59,22 @@ void pre_auton(void) {
     Brain.Screen.clearScreen();            //brain screen for auton selection.
     switch(current_auton_selection){       //Tap the brain screen to cycle through autons.
       case 0:
-        Brain.Screen.printAt(50, 50, "Opp Desc");
+        Brain.Screen.printAt(50, 50, "Opp Desc & Mid");
         break;
       case 1:
         Brain.Screen.printAt(50, 50, "Same Score");
         break;
       case 2:
-        Brain.Screen.printAt(50, 50, "Turn Test");
+        Brain.Screen.printAt(50, 50, "DO NOTHING!");
         break;
       case 3:
-        Brain.Screen.printAt(50, 50, "Swing Test");
+        Brain.Screen.printAt(50, 50, "Opp Desc & Score Pre");
         break;
       case 4:
-        Brain.Screen.printAt(50, 50, "Odom Test");
+        Brain.Screen.printAt(50, 50, "Same Score No Mid");
+        break;
+      case 5:
+        Brain.Screen.printAt(50, 50, "Opp  Desc Shoot Touch");
         break;
     }
     if(Brain.Screen.pressing()){
@@ -89,61 +91,45 @@ void autonomous(void) {
   auto_started = true;
   switch(current_auton_selection){  
     case 0:
-    SameSide_Score();
+    OppSide_Desc_Score();
+    
        //This is the default auton, if you don't select from the brain.
-      break;        //Change these to be your own auton functions in order to use the auton selector.
+      break;     
     case 1:         //Tap the screen to cycle through autons.
-      OppSide_Desc();
+    OppSide_Desc_Mid();
       break;
     case 2:
-      turn_test();
+      Sit();
       break;
     case 3:
-      swing_test();
+       SameSide_Score();
       break;
     case 4:
-      odom_test();
+      SameSide_NoMid();
+      break;
+    case 5:
+      Opp_WP();
       break;
  }
 }
-
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*                              User Control Task                            */
-/*                                                                           */
-/*  This task is used to control your robot during the user control phase of */
-/*  a VEX Competition.                                                       */
-/*                                                                           */
-/*  You must modify the code to add your own robot specific commands here.   */
-/*---------------------------------------------------------------------------*/
 
 void usercontrol(void) {
   chassis.set_coordinates(0,0,0);
   Controller1.ButtonX.pressed(ToggleClimb);
   // User control code here, inside the loop
   while (1) {
-    // This is the main execution loop for the user control program.
-    // Each time through the loop your program should update motor + servo
-    // values based on feedback from the joysticks.
-
-    // ........................................................................
-    // Insert user code here. This is where you use the joystick values to
-    // update your motors, etc.
-    // ........................................................................
-
     //Replace this line with chassis.control_tank(); for tank drive 
-    //or chassis.control_holonomic(); for holo drive.
     chassis.control_arcade();
     
     Controller1.Screen.print(chassis.get_X_position());
     Controller1.Screen.print(" ");
     Controller1.Screen.print(chassis.get_Y_position());
     Controller1.Screen.newLine();
-    /////USER DRIVE CODE BEGIN////
 
     if(Controller1.ButtonR1.pressing()){
       PunchMotor.spin(reverse, 10.5, volt);
-    }else{
+    }
+    else{
       PunchMotor.stop();
     }
 
@@ -164,7 +150,7 @@ void usercontrol(void) {
       Wings.set(true);
       Intake.spin(reverse,100,percent);
     }
-    else{
+    else {
       Wings.set(false);
     }
     
@@ -173,9 +159,6 @@ void usercontrol(void) {
   }
 }
 
-//
-// Main will set up the competition functions and callbacks.
-//
 int main() {
   // Set up callbacks for autonomous and driver control periods.
   Competition.autonomous(autonomous);

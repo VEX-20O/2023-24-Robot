@@ -125,7 +125,7 @@ void Drive::drive_distance(float distance, float heading, float drive_max_voltag
   drive_distance(distance, heading, drive_max_voltage, heading_max_voltage, drive_settle_error, drive_settle_time, drive_timeout, drive_kp, drive_ki, drive_kd, drive_starti, heading_kp, heading_ki, heading_kd, heading_starti);
 }
 
-void Drive::drive_dis_half_speed(float distance, float heading, float drive_max_voltage, float speedratio, bool isRight){
+void Drive::swing_speed_scalar(float distance, float heading, float drive_max_voltage, float speedratio, bool isRight){
   desired_heading = heading;
   PID drivePID(distance, drive_kp, drive_ki, drive_kd, drive_starti, drive_settle_error, drive_settle_time, drive_timeout);
   PID headingPID(reduce_negative_180_to_180(heading - get_absolute_heading()), heading_kp, heading_ki, heading_kd, heading_starti);
