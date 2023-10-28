@@ -145,7 +145,7 @@ void OppSide_Desc_Mid(){
 
   chassis.drive_distance(8,315);
 
- Wings.set(true);
+  Wings.set(true);
   chassis.swing_speed_scalar(9, 90, 4, 0.5, false);
 
   Wings.set(false);
@@ -156,13 +156,13 @@ void OppSide_Desc_Mid(){
 
   PunchMotor.setVelocity(100, percent);
   PunchMotor.spinFor(forward, -2.938, turns);
-  
-  chassis.swing_speed_scalar(45, 20, 12, 1, false);
+  chassis.drive_distance(9);
+  chassis.swing_speed_scalar(40, 0, 12, 1, false);
 
   Vision21.takeSnapshot(Vision21__GO);
   if(Vision21.objects[0].exists&&Vision21.objects[0].height > 50){
     Intake.spin(forward,100,percent);
-      chassis.drive_distance(9);
+      chassis.drive_distance(11);
       wait(0.4, sec);
       Intake.stop();
       chassis.right_swing_to_angle(90,chassis.swing_max_voltage,chassis.swing_settle_error,chassis.swing_settle_time,600,chassis.swing_kp,chassis.swing_ki,chassis.swing_kd,chassis.swing_starti);
@@ -206,6 +206,7 @@ void Opp_WP(){
 }
 
 void OppSide_Desc_Score_Score(){
+  //touch + score + desc (brings to side)
   chassis.set_coordinates(0, 0, 0);
 
   
@@ -228,8 +229,9 @@ void OppSide_Desc_Score_Score(){
    chassis.turn_to_angle(135);
    chassis.drive_distance(-10);
   chassis.drive_distance(27, 90, 11, 5);
+  Wings.set(true);
   
-  chassis.drive_distance(37);
+  chassis.drive_distance(23);
    //bool didsee = VisionChase();
     
     //chassis.turn_to_angle(90);
@@ -255,7 +257,7 @@ void OppSide_Desc_Score_Score(){
 void SameSide_Score(){
   chassis.set_drive_constants(12, 4, 0, 20, 0);
   chassis.set_coordinates(0, 0, 270);
-  bool a = VisionChase(3);
+  bool a = VisionChase(1);
   chassis.drive_to_point(0, 0,12,12);
   //chassis.drive_distance(-15, 270);
   chassis.swing_speed_scalar(-45, 180, 12, 0.5, true);
@@ -278,8 +280,9 @@ void SameSide_Score(){
   VisionChase1(2);
   chassis.drive_distance(-10);
   Wings.set(true);
-  chassis.drive_distance(42,80,12,12,chassis.drive_settle_error,0,4000);
+  chassis.drive_distance(40,80,12,12,chassis.drive_settle_error,0,1000);
   Intake.spin(reverse,100,percent);
+  chassis.drive_distance(10);
 
 }
 

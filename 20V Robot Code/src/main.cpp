@@ -93,7 +93,7 @@ void pre_auton(void) {
         Brain.Screen.printAt(50, 50, "Offensive Score 2 Touch");
         break;
       case 5:
-        Brain.Screen.printAt(50, 50, "Opposite WP Descore & Launch Pre & Touch (brings 1?)");
+        Brain.Screen.printAt(50, 50, "Opposite WP Descore & Launch Pre & Touch");
         break;
       case 6:
         Brain.Screen.printAt(50, 50, "Vision Test SameSide (HAVE ROBOT SETUP");
