@@ -23,6 +23,7 @@ competition Competition;
 
 Drive chassis(
 ZERO_TRACKER_ODOM,
+
 //Left Motors:
 motor_group(DriveL1,DriveL2,DriveL3),
 //Right Motors:
@@ -40,7 +41,7 @@ PORT6,
 //gyro degrees
 360,
 
-//For a zero tracker tank drive with odom, put the positive distance from the center of the robot to the right side of the drive.
+//positive distance from the center of the robot to the right side of the drive
 //This distance is in inches:
 4
 );
