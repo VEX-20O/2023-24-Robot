@@ -1,5 +1,5 @@
 #pragma once
-#include "LAH/drive.h"
+#include "drive.h"
 
 class Drive;
 
@@ -13,6 +13,7 @@ void OppSide_Desc_Score_Score();
 void SameSide_Score();
 void SameSide_NoMid();
 void Sit();
+void VisTest();
 
 void drive_test();
 void turn_test();

@@ -75,13 +75,16 @@ void pre_auton(void) {
         Brain.Screen.printAt(50, 50, "Offensive Score 2 Touch");
         break;
       case 5:
-        Brain.Screen.printAt(50, 50, "Opposite Descore & Score Pre & Touch (brings 1>)");
+        Brain.Screen.printAt(50, 50, "Opposite Descore & Score Pre & Touch (brings 1?)");
+        break;
+      case 6:
+        Brain.Screen.printAt(50, 50, "Vision Test SameSide (HAVE ROBOT SETUP");
         break;
     }
     if(Brain.Screen.pressing()){
       while(Brain.Screen.pressing()) {}
       current_auton_selection ++;
-    } else if (current_auton_selection == 5){
+    } else if (current_auton_selection == 6){
       current_auton_selection = 0;
     }
     task::sleep(10);
@@ -108,6 +111,9 @@ void autonomous(void) {
       break;
     case 5:
       Opp_WP();
+      break;
+    case 6:
+      VisTest();
       break;
  }
 }

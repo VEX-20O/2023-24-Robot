@@ -340,3 +340,6 @@ void tank_odom_test(){
   chassis.turn_to_angle(0);
 }
 
+void VisTest(){
+  bool a = VisionChase1(2);
+}

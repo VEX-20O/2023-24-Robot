@@ -18,10 +18,10 @@
 #include "v5_vcs.h"
 
 #include "robot-config.h"
-#include "LAH/odom.h"
-#include "LAH/drive.h"
-#include "LAH/util.h"
-#include "LAH/PID.h"
+#include "odom.h"
+#include "drive.h"
+#include "util.h"
+#include "PID.h"
 #include "autons.h"
 
 const int   v_screen_origin_x = 150;
