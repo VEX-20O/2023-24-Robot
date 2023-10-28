@@ -59,22 +59,22 @@ void pre_auton(void) {
     Brain.Screen.clearScreen();            //brain screen for auton selection.
     switch(current_auton_selection){       //Tap the brain screen to cycle through autons.
       case 0:
-        Brain.Screen.printAt(50, 50, "Opp Desc & Mid");
+        Brain.Screen.printAt(50, 50, "Offensive Score 3");
         break;
       case 1:
-        Brain.Screen.printAt(50, 50, "Same Score 3");
+        Brain.Screen.printAt(50, 50, "Opposite Descore Shoot Touch");
         break;
       case 2:
         Brain.Screen.printAt(50, 50, "DO NOTHING!");
         break;
       case 3:
-        Brain.Screen.printAt(50, 50, "Opp Desc & Score Pre");
+        Brain.Screen.printAt(50, 50, "Opposite Shoot 2");
         break;
       case 4:
-        Brain.Screen.printAt(50, 50, "Same Score Touch");
+        Brain.Screen.printAt(50, 50, "Offensive Score 2 Touch");
         break;
       case 5:
-        Brain.Screen.printAt(50, 50, "Opp  Desc Shoot Touch");
+        Brain.Screen.printAt(50, 50, "Opposite Descore & Score Pre");
         break;
     }
     if(Brain.Screen.pressing()){
@@ -91,20 +91,16 @@ void autonomous(void) {
   auto_started = true;
   switch(current_auton_selection){  
     case 0:
-   
-  SameSide_Score();
-     
-       //This is the default auton, if you don't select from the brain.
-      break;     
-    case 1:         //Tap the screen to cycle through autons.
-   
-     OppSide_Desc_Score_Score();
+       SameSide_Score();
+       break;     
+    case 1:        
+      OppSide_Desc_Score_Score();
       break;
     case 2:
       Sit();
       break;
     case 3:
-       SameSide_Score();
+       OppSide_Desc_Mid();
       break;
     case 4:
       SameSide_NoMid();
