@@ -9,7 +9,7 @@ void default_constants();
 
 void OppSide_Desc_Mid();
 void Opp_WP();
-void OppSide_Desc_Score();
+void OppSide_Desc_Score_Score();
 void SameSide_Score();
 void SameSide_NoMid();
 void Sit();
