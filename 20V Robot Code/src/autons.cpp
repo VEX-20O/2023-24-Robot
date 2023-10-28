@@ -180,7 +180,7 @@ void OppSide_Desc_Mid(){
 
 void Opp_WP(){
   chassis.set_coordinates(0, 0, 315);
-
+  chassis.drive_distance(8,315);
   Wings.set(true);
   chassis.swing_speed_scalar(9, 90, 4, 0.5, false);
 
