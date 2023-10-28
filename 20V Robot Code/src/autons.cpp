@@ -54,6 +54,27 @@ bool VisionChase(float sp){
   Controller1.Screen.print("D");
     return(false);
 }
+
+void Skills(){
+  chassis.drive_distance(25);
+  chassis.turn_to_angle(45);
+  chassis.drive_distance(-25, chassis.get_absolute_heading(), 13, 13,chassis.drive_settle_error,chassis.drive_settle_time,900);
+  PunchMotor.spin(reverse, 100, percent);
+  wait(2,seconds);
+  PunchMotor.stop();
+  chassis.drive_distance(40);
+  chassis.turn_to_angle(0);
+  Wings.set(true);
+  chassis.drive_distance(35);
+  chassis.turn_to_angle(90);
+  Intake.spin(forward,100,percent);
+   chassis.drive_distance(100, 90, 13, 13,chassis.drive_settle_error,chassis.drive_settle_time,5000);
+  Intake.spin(reverse,100,percent);
+  chassis.drive_distance(40,90,13,13);
+ 
+
+}
+
 bool VisionChase1(float sp){
   Vision21.takeSnapshot(Vision21__GO); 
   if(Vision21.objects[0].exists){

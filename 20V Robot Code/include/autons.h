@@ -14,6 +14,7 @@ void SameSide_Score();
 void SameSide_NoMid();
 void Sit();
 void VisTest();
+void Skills();
 
 void drive_test();
 void turn_test();

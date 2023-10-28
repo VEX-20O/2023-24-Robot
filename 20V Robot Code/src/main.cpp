@@ -1,3 +1,20 @@
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// DriveL1              motor         1               
+// DriveL2              motor         2               
+// DriveL3              motor         3               
+// DriveR1              motor         9               
+// DriveR2              motor         8               
+// DriveR3              motor         10              
+// Inertial6            inertial      6               
+// Controller1          controller                    
+// Wings                digital_out   H               
+// PunchMotor           motor         5               
+// Climb                digital_out   G               
+// Intake               motor_group   4, 7            
+// Vision21             vision        21              
+// ---- END VEXCODE CONFIGURED DEVICES ----
 #include "vex.h"
 
 // ---- START VEXCODE CONFIGURED DEVICES ----
@@ -60,7 +77,8 @@ void pre_auton(void) {
     Brain.Screen.clearScreen();            //brain screen for auton selection.
     switch(current_auton_selection){       //Tap the brain screen to cycle through autons.
       case 0:
-        Brain.Screen.printAt(50, 50, "Offensive Score 3");
+           Brain.Screen.printAt(50, 50, "SHILLS");
+       
         break;
       case 1:
         Brain.Screen.printAt(50, 50, "Opposite Score Pre & Desc & Touch");
@@ -80,11 +98,14 @@ void pre_auton(void) {
       case 6:
         Brain.Screen.printAt(50, 50, "Vision Test SameSide (HAVE ROBOT SETUP");
         break;
+      case 7:
+            Brain.Screen.printAt(50, 50, "Offensive Score 3");
+      break;
     }
     if(Brain.Screen.pressing()){
       while(Brain.Screen.pressing()) {}
       current_auton_selection ++;
-    } else if (current_auton_selection == 6){
+    } else if (current_auton_selection == 7){
       current_auton_selection = 0;
     }
     task::sleep(10);
@@ -95,7 +116,8 @@ void autonomous(void) {
   auto_started = true;
   switch(current_auton_selection){  
     case 0:
-       SameSide_Score();
+     Skills();
+       
        break;     
     case 1:        
       OppSide_Desc_Score_Score();
@@ -114,6 +136,9 @@ void autonomous(void) {
       break;
     case 6:
       VisTest();
+      break;
+    case 7:
+     SameSide_Score();
       break;
  }
 }
@@ -157,6 +182,10 @@ void usercontrol(void) {
     }
     else {
       Wings.set(false);
+    }
+
+    if(Controller1.ButtonX.pressing()){
+      Climb.set(false);
     }
     
     wait(20, msec); // Sleep the task for a short amount of time to
