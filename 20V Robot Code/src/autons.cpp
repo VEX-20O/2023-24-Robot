@@ -56,7 +56,17 @@ bool VisionChase(float sp){
 }
 
 void Skills(){
-  chassis.drive_distance(25);
+  PunchMotor.spin(reverse, 100, percent);
+/*
+  chassis.drive_distance(35);
+  chassis.turn_to_angle(90);
+  Intake.spin(forward,100,percent);
+  chassis.drive_distance(100, 90, 13, 13,chassis.drive_settle_error,chassis.drive_settle_time,5000);
+  Intake.spin(reverse,100,percent);
+  chassis.drive_distance(40,90,13,13);
+  */
+  /*
+ chassis.drive_distance(25);
   chassis.turn_to_angle(45);
   chassis.drive_distance(-25, chassis.get_absolute_heading(), 13, 13,chassis.drive_settle_error,chassis.drive_settle_time,900);
   PunchMotor.spin(reverse, 100, percent);
@@ -71,8 +81,7 @@ void Skills(){
    chassis.drive_distance(100, 90, 13, 13,chassis.drive_settle_error,chassis.drive_settle_time,5000);
   Intake.spin(reverse,100,percent);
   chassis.drive_distance(40,90,13,13);
- 
-
+*/
 }
 
 bool VisionChase1(float sp){
@@ -281,8 +290,9 @@ void SameSide_Score(){
   VisionChase1(2);
   chassis.drive_distance(-10);
   Wings.set(true);
-  chassis.drive_distance(40,80,12,12,chassis.drive_settle_error,0,1500);
+  chassis.drive_distance(20,80,12,12,chassis.drive_settle_error,0,1000);
   Intake.spin(reverse,100,percent);
+  chassis.drive_distance(30,80,12,12,chassis.drive_settle_error,0,2000);
   chassis.drive_distance(10);
 
 }
