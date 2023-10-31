@@ -117,6 +117,6 @@ public:
   
   void swing_speed_scalar(float distance, float heading, float drive_max_voltage, float speedratio, bool isRight);
 
-  void control_arcade();
+  void control_arcade(float turningspeedratio);
   void control_tank();
 };

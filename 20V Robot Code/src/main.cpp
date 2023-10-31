@@ -16,6 +16,7 @@
 // Vision21             vision        21              
 // ---- END VEXCODE CONFIGURED DEVICES ----
 #include "vex.h"
+#include <string>
 
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
@@ -75,34 +76,43 @@ void pre_auton(void) {
 
   while(auto_started == false){            //Changing the names below will only change their names on the
     Brain.Screen.clearScreen();            //brain screen for auton selection.
+    Controller1.Screen.clearLine();
     switch(current_auton_selection){       //Tap the brain screen to cycle through autons.
       case 0:
-        Brain.Screen.printAt(50, 50, "SHILLS");
+        Controller1.Screen.print(AUTO1);
+        Brain.Screen.printAt(50, 50, AUTO1);
         break;
       case 1:
-        Brain.Screen.printAt(50, 50, "Opposite Score Pre & Desc & Touch");
+        Controller1.Screen.print(AUTO2);
+        Brain.Screen.printAt(50, 50, AUTO2);
         break;
       case 2:
-        Brain.Screen.printAt(50, 50, "DO NOTHING!");
+        Controller1.Screen.print(AUTO3);
+        Brain.Screen.printAt(50, 50, AUTO3);
         break;
       case 3:
-        Brain.Screen.printAt(50, 50, "Desc & Opposite Shoot 2");
+        Controller1.Screen.print(AUTO4);
+        Brain.Screen.printAt(50, 50, AUTO4);
         break;
       case 4:
-        Brain.Screen.printAt(50, 50, "Offensive Score 2 Touch");
+        Controller1.Screen.print(AUTO5);
+        Brain.Screen.printAt(50, 50, AUTO5);
         break;
       case 5:
-        Brain.Screen.printAt(50, 50, "Opposite WP Descore & Launch Pre & Touch");
+        Controller1.Screen.print(AUTO6);
+        Brain.Screen.printAt(50, 50, AUTO6);
         break;
       case 6:
-        Brain.Screen.printAt(50, 50, "Vision Test SameSide (HAVE ROBOT SETUP");
+        Controller1.Screen.print(AUTO7);
+        Brain.Screen.printAt(50, 50, AUTO7);
         break;
       case 7:
-            Brain.Screen.printAt(50, 50, "Offensive Score 3");
-      break;
+        Controller1.Screen.print(AUTO8);
+        Brain.Screen.printAt(50, 50, AUTO8);
+        break;
     }
-    if(Brain.Screen.pressing()){
-      while(Brain.Screen.pressing()) {}
+    if(Brain.Screen.pressing() || Controller1.ButtonA.pressing()){
+      while(Brain.Screen.pressing() || Controller1.ButtonA.pressing()) {}
       current_auton_selection ++;
     } else if (current_auton_selection == 8){
       current_auton_selection = 0;
@@ -115,40 +125,39 @@ void autonomous(void) {
   auto_started = true;
   switch(current_auton_selection){  
     case 0:
-    
-       OppSide_Desc_Mid();
-       break;     
+      Skills();
+      break;     
     case 1:        
-      OppSide_Desc_Score_Score();
+      Close_Desc_Mid();
       break;
     case 2:
-      Sit();
+      Close_Mid_Score();
       break;
     case 3:
-        Skills();
+      Close_Desc_Shoot_Touch();
       break;
     case 4:
-      SameSide_NoMid();
+      Close_Score_Desc_Touch();
       break;
     case 5:
-      Opp_WP();
+      Far_Score();
       break;
     case 6:
-      VisTest();
+      Far_Score_Touch();
       break;
     case 7:
-     SameSide_Score();
+      Sit();
       break;
- }
+  }
 }
 
 void usercontrol(void) {
   robot.set_coordinates(0,0,0);
-  Controller1.ButtonX.pressed(ToggleClimb);
+
   // User control code here, inside the loop
   while (1) {
     //Replace this line with robot.control_tank(); for tank drive 
-    robot.control_arcade();
+    robot.control_arcade(0.2);
     
     Controller1.Screen.print(robot.get_X_position());
     Controller1.Screen.print(" ");
