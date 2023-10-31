@@ -1,86 +1,13 @@
 #include "vex.h"
 #include <cmath>
 
-bool VisionChase(float sp){
-  Vision21.takeSnapshot(Vision21__GO); 
-  if(Vision21.objects[0].exists){
-    Controller1.Screen.print("A");
-    /*if (Vision21.objects[0].height < 40){
-      Controller1.Screen.print("B");
-      return false;
-    }
-    */
-    while (1) {
-      Controller1.Screen.print("C");
-      bool aligned1=true;
-      Vision21.takeSnapshot(Vision21__GO); 
-
-      float kdp = 0.22;
-      double visXerr = v_screen_width/2.0-Vision21.objects[0].centerX;
-      int visHerr=Vision21.objects[0].height - 115;
-      double turnL = 0;
-      double turnR = 0;
-
-      if(visXerr > 50 || visXerr <-50){
-        turnR-=visXerr*kdp;
-        turnL+=visXerr*kdp;
-        aligned1=false;
-      }
-
-      if(Vision21.objects[0].height > 130 || Vision21.objects[0].height < 100){
-        turnR+= visHerr*-0.55;
-        turnL+= visHerr*-0.55;
-        aligned1=false;
-      }
-
-      DriveL1.spin(forward,turnL*sp,percent);
-      DriveL2.spin(forward,turnL*sp,percent);
-      DriveL3.spin(forward,turnL*sp,percent);
-      DriveR1.spin(forward,turnR*sp,percent);
-      DriveR2.spin(forward,turnR*sp,percent);
-      DriveR3.spin(forward,turnR*sp,percent);
-
-      Controller1.Screen.print(aligned1);
-      Controller1.Screen.newLine();
-
-      if(aligned1){
-        Intake.spin(forward,100, percent);    
-        chassis.drive_distance(6,chassis.get_absolute_heading(),3,3);
-        Intake.stop(brake);
-        return true;
-      }
-    }
-  }
-  Controller1.Screen.print("D");
-    return(false);
-}
-
-void Skills(){
- 
- chassis.drive_distance(25);
-  chassis.turn_to_angle(45);
-  chassis.drive_distance(-25, chassis.get_absolute_heading(), 13, 13,chassis.drive_settle_error,chassis.drive_settle_time,900);
-  PunchMotor.spin(reverse, 100, percent);
-  wait(4,seconds);
-  PunchMotor.stop();
-  chassis.drive_distance(40);
-  chassis.turn_to_angle(0);
-  Wings.set(true);
-  chassis.drive_distance(35);
-  chassis.turn_to_angle(90);
-  Intake.spin(forward,100,percent);
-   chassis.drive_distance(100, 90, 13, 13,chassis.drive_settle_error,chassis.drive_settle_time,5000);
-  Intake.spin(reverse,100,percent);
-  chassis.drive_distance(40,90,13,13);
-}
-
-bool VisionChase1(float sp, vex::vision::signature vis){
+void VisionChase(float speed, float pturn, float pdrive, vex::vision::signature vis, float timeout, float lungedist){
   Vision21.takeSnapshot(vis); 
   if(Vision21.objects[0].exists){
     Controller1.Screen.print("A");
     /*if (Vision21.objects[0].height < 40){
       Controller1.Screen.print("B");
-      return false;
+      return;
     }
     */
     while (1) {
@@ -88,344 +15,331 @@ bool VisionChase1(float sp, vex::vision::signature vis){
       bool aligned1=true;
       Vision21.takeSnapshot(vis); 
 
-      float kdp = 0.22;
       double visXerr = v_screen_width/2.0-Vision21.objects[0].centerX;
       int visHerr=Vision21.objects[0].height - 115;
       double turnL = 0;
       double turnR = 0;
 
       if(visXerr > 50 || visXerr <-50){
-        turnR-=visXerr*kdp;
-        turnL+=visXerr*kdp;
+        turnR-=visXerr*pturn;
+        turnL+=visXerr*pturn;
         aligned1=false;
       }
 
       if(Vision21.objects[0].height < 100){
-        turnR+= visHerr*-0.55;
-        turnL+= visHerr*-0.55;
+        turnR+= visHerr*-pdrive;
+        turnL+= visHerr*-pdrive;
         aligned1=false;
       }
 
-      DriveL1.spin(forward,turnL*sp,percent);
-      DriveL2.spin(forward,turnL*sp,percent);
-      DriveL3.spin(forward,turnL*sp,percent);
-      DriveR1.spin(forward,turnR*sp,percent);
-      DriveR2.spin(forward,turnR*sp,percent);
-      DriveR3.spin(forward,turnR*sp,percent);
+      DriveL1.spin(forward,turnL*speed,percent);
+      DriveL2.spin(forward,turnL*speed,percent);
+      DriveL3.spin(forward,turnL*speed,percent);
+      DriveR1.spin(forward,turnR*speed,percent);
+      DriveR2.spin(forward,turnR*speed,percent);
+      DriveR3.spin(forward,turnR*speed,percent);
 
       Controller1.Screen.print(aligned1);
       Controller1.Screen.newLine();
 
       if(aligned1){
         Intake.spin(forward,100, percent);    
-        chassis.drive_distance(6,chassis.get_absolute_heading(),3,3,chassis.drive_settle_error,chassis.drive_settle_time,500);
+        robot.drive_distance(lungedist,robot.get_absolute_heading(),3,3,robot.drive_settle_error,robot.drive_settle_time,500);
         Intake.stop(brake);
-        return true;
       }
     }
   }
-  Controller1.Screen.print("D");
-    return(false);
 }
 
 void default_constants(){
-  chassis.set_drive_constants(10, 1.5, 0, 10, 0);
-  chassis.set_heading_constants(6, .4, 0, 1, 0);
-  chassis.set_turn_constants(12, .4, .03, 3, 15);
-  chassis.set_swing_constants(12, .3, .001, 2, 15);
-  chassis.set_drive_exit_conditions(1.5, 300, 5000);
-  chassis.set_turn_exit_conditions(1, 300, 3000);
-  chassis.set_swing_exit_conditions(1, 300, 3000);
+  robot.set_drive_constants(10, 1.5, 0, 10, 0);
+  robot.set_heading_constants(6, .4, 0, 1, 0);
+  robot.set_turn_constants(12, .4, .03, 3, 15);
+  robot.set_swing_constants(12, .3, .001, 2, 15);
+  robot.set_drive_exit_conditions(1.5, 300, 5000);
+  robot.set_turn_exit_conditions(1, 300, 3000);
+  robot.set_swing_exit_conditions(1, 300, 3000);
 }
 
-void OppSide_Desc_Mid(){
-
-  chassis.set_coordinates(0, 0, 0);
-
-  chassis.drive_distance(40,20,12,10);
-  chassis.drive_distance(20,5);
+void Skills(){
+ 
+  robot.drive_distance(25);
+  robot.turn_to_angle(45);
+  robot.drive_distance(-25, robot.get_absolute_heading(), 13, 13,robot.drive_settle_error,robot.drive_settle_time,900);
+  PunchMotor.spin(reverse, 100, percent);
+  wait(4,seconds);
+  PunchMotor.stop();
+  robot.drive_distance(40);
+  robot.turn_to_angle(0);
+  Wings.set(true);
+  robot.drive_distance(35);
+  robot.turn_to_angle(90);
   Intake.spin(forward,100,percent);
-  chassis.drive_distance(7);
+   robot.drive_distance(100, 90, 13, 13,robot.drive_settle_error,robot.drive_settle_time,5000);
+  Intake.spin(reverse,100,percent);
+  robot.drive_distance(40,90,13,13);
+}
+
+void Close_Mid_Score(){
+
+  robot.set_coordinates(0, 0, 0);
+
+  robot.drive_distance(40,20,12,10);
+  robot.drive_distance(20,5);
+  Intake.spin(forward,100,percent);
+  robot.drive_distance(7);
   wait(0.4, sec);
   Intake.stop();
-      chassis.right_swing_to_angle(90,12,chassis.swing_settle_error,chassis.swing_settle_time,600,chassis.swing_kp,chassis.swing_ki,chassis.swing_kd,chassis.swing_starti);
-      
-     
-      chassis.drive_distance(32,90,12,chassis.heading_max_voltage,chassis.drive_settle_error,chassis.drive_settle_time,2000);      
-       Intake.spin(reverse, 100, percent);
-      wait(0.3, seconds);
-      Intake.stop();
-      chassis.drive_distance(-4);
-
-
-      
-      chassis.turn_to_angle(0);
-      Wings.set(true);
-      chassis.drive_distance(13,0);
-      Wings.set(false);
-      chassis.drive_distance(-20,20);
-      chassis.turn_to_angle(210);
-      Intake.spin(forward,100,percent);
-      chassis.drive_distance(44,218);
-      Intake.stop();
-      chassis.turn_to_angle(315);
-      //chassis.swing_speed_scalar(24, 355, 12, 1, false);
-      chassis.drive_distance(17);
-      Intake.spin(reverse,100,percent);
-      chassis.drive_distance(9,0);
-
-   chassis.drive_distance(4,0,12,12);
-   Intake.stop();
-
-   /*
-  chassis.swing_speed_scalar(-22, 315, 6.5, 0.35, true);
-  wait(0.5,sec);
-  Wings.set(true);
-   chassis.swing_speed_scalar(-15, 270, 12, 0.1, false);
-   Wings.set(false);
-   chassis.drive_distance(7);
-   chassis.turn_to_angle(135);
-   chassis.drive_distance(-10);
-   chassis.drive_distance(3);
-  chassis.drive_distance(29, 90, 11, 5);
-  Wings.set(true);
+  robot.right_swing_to_angle(90,12,robot.swing_settle_error,robot.swing_settle_time,600,robot.swing_kp,robot.swing_ki,robot.swing_kd,robot.swing_starti);
+  robot.drive_distance(32,90,12,robot.heading_max_voltage,robot.drive_settle_error,robot.drive_settle_time,2000);      
+  Intake.spin(reverse, 100, percent);
+  wait(0.3, seconds);
+  Intake.stop();
+  robot.drive_distance(-4);
   
-  chassis.drive_distance(18);
+  robot.turn_to_angle(0);
+  Wings.set(true);
+  robot.drive_distance(13,0);
+  Wings.set(false);
+  robot.drive_distance(-20,20);
+  robot.turn_to_angle(210);
+  Intake.spin(forward,100,percent);
+  robot.drive_distance(44,218);
+  Intake.stop();
+  robot.turn_to_angle(315);
+  
+  robot.drive_distance(17);
+  Intake.spin(reverse,100,percent);
+  robot.drive_distance(9,0);
 
-      //bool a = VisionChase1(1, Vision21__GO);
-*/
+   robot.drive_distance(4,0,12,12);
+   Intake.stop();
      
 }
 
-/*
-void OppSide_Desc_Mid(){
+void Close_Desc_Mid(){
 
-  chassis.set_coordinates(0, 0, 315);
+  robot.set_coordinates(0, 0, 315);
 
-  chassis.drive_distance(8,315);
+  robot.drive_distance(8,315);
 
   Wings.set(true);
-  chassis.swing_speed_scalar(9, 90, 4, 0.5, false);
-
+  robot.swing_speed_scalar(9, 90, 4, 0.5, false);
   Wings.set(false);
-  
-        
 
-  chassis.turn_to_angle(65,12);
+  robot.turn_to_angle(65,12);
 
   PunchMotor.setVelocity(100, percent);
   PunchMotor.spinFor(forward, -2.938, turns);
-  chassis.drive_distance(9);
-  chassis.swing_speed_scalar(40, 0, 12, 1, false);
+  robot.drive_distance(9);
+  robot.swing_speed_scalar(40, 0, 12, 1, false);
 
   Vision21.takeSnapshot(Vision21__GO);
   if(Vision21.objects[0].exists&&Vision21.objects[0].height > 50){
     Intake.spin(forward,100,percent);
-      chassis.drive_distance(11);
-      wait(0.4, sec);
-      Intake.stop();
-      chassis.right_swing_to_angle(90,chassis.swing_max_voltage,chassis.swing_settle_error,chassis.swing_settle_time,600,chassis.swing_kp,chassis.swing_ki,chassis.swing_kd,chassis.swing_starti);
-      
-     
-      chassis.drive_distance(33,90,12,chassis.heading_max_voltage,chassis.drive_settle_error,chassis.drive_settle_time,1300);      
-       Intake.spin(reverse, 100, percent);
-      wait(0.3, seconds);
-      Intake.stop();
-      chassis.drive_distance(-4);
+    robot.drive_distance(11);
+    wait(0.4, sec);
+    Intake.stop();
+    robot.right_swing_to_angle(90,robot.swing_max_voltage,robot.swing_settle_error,robot.swing_settle_time,600,robot.swing_kp,robot.swing_ki,robot.swing_kd,robot.swing_starti);
+    robot.drive_distance(33,90,12,robot.heading_max_voltage,robot.drive_settle_error,robot.drive_settle_time,1300);      
+    Intake.spin(reverse, 100, percent);
+    wait(0.3, seconds);
+    Intake.stop();
+    robot.drive_distance(-4);
+  } 
+}
 
-      }
-      
-}*/
-
-void Opp_WP(){
-  chassis.set_coordinates(0, 0, 315);
-  chassis.drive_distance(8,315);
+void Close_Desc_Shoot_Touch(){
+  robot.set_coordinates(0, 0, 315);
+  robot.drive_distance(8,315);
   Wings.set(true);
-  chassis.swing_speed_scalar(9, 90, 4, 0.5, false);
+  robot.swing_speed_scalar(9, 90, 4, 0.5, false);
 
   Wings.set(false);
 
-  chassis.turn_to_angle(65);
+  robot.turn_to_angle(65);
 
   PunchMotor.setVelocity(100, percent);
   PunchMotor.spinFor(forward, -2.938, turns);
   
-
-  chassis.set_drive_constants(12, 1.5, 0, 10, 0);
+  robot.set_drive_constants(12, 1.5, 0, 10, 0);
   
-  chassis.turn_to_point(0,0);
-  chassis.drive_to_point(6, -8.5);
-    Controller1.Screen.print(chassis.odom.X_position);
-      Controller1.Screen.print(" ");
-   Controller1.Screen.print(chassis.odom.Y_position);
-   chassis.turn_to_angle(90);
-  chassis.drive_distance(45);  
-
+  robot.turn_to_point(0,0);
+  robot.drive_to_point(6, -8.5);
+  Controller1.Screen.print(robot.odom.X_position);
+  Controller1.Screen.print(" ");
+  Controller1.Screen.print(robot.odom.Y_position);
+  robot.turn_to_angle(90);
+  robot.drive_distance(45);  
 
 }
 
-void OppSide_Desc_Score_Score(){
+void Close_Score_Desc_Touch(){
   //touch + score + desc (brings to side)
-  chassis.set_coordinates(0, 0, 0);
+  robot.set_coordinates(0, 0, 0);
 
-  
-  chassis.set_drive_constants(12, 4, 0, 20, 0);
-  chassis.swing_speed_scalar(25, 315, 12, 0.5, true);
-  
-  //CODE MISSING HERE ^^^^^^
+  robot.set_drive_constants(12, 4, 0, 20, 0);
+  robot.swing_speed_scalar(25, 315, 12, 0.5, true);
+  robot.swing_speed_scalar(15, 0, 12, 0.5, false);
  
   Intake.spin(reverse,100,percent);
   wait(0.5,seconds);
   Intake.stop();
-  chassis.set_coordinates(0, 0, chassis.get_absolute_heading());
-   chassis.drive_distance(2);
-  chassis.drive_distance(-2);
-  chassis.swing_speed_scalar(-25, 315, 6.5, 0.35, true);
+  robot.set_coordinates(0, 0, robot.get_absolute_heading());
+   robot.drive_distance(2);
+  robot.drive_distance(-2);
+  robot.swing_speed_scalar(-25, 315, 6.5, 0.35, true);
   wait(0.5,sec);
   Wings.set(true);
-   chassis.swing_speed_scalar(-15, 270, 12, 0.1, false);
+   robot.swing_speed_scalar(-15, 270, 12, 0.1, false);
    Wings.set(false);
-   chassis.drive_distance(7);
-   chassis.turn_to_angle(135);
-   chassis.drive_distance(-10);
-   chassis.drive_distance(3);
-  chassis.drive_distance(29, 90, 11, 5);
+   robot.drive_distance(7);
+   robot.turn_to_angle(135);
+   robot.drive_distance(-10);
+   robot.drive_distance(3);
+  robot.drive_distance(29, 90, 11, 5);
   Wings.set(true);
   
-  chassis.drive_distance(18);
+  robot.drive_distance(18);
    //bool didsee = VisionChase();
     
-    //chassis.turn_to_angle(90);
-    //chassis.drive_distance(50);
-  /*chassis.drive_to_point(16, -16);
+    //robot.turn_to_angle(90);
+    //robot.drive_distance(50);
+  /*robot.drive_to_point(16, -16);
   Wings.set(true);
-  chassis.swing_speed_scalar(15, 0, 12, 0.75, false);
+  robot.swing_speed_scalar(15, 0, 12, 0.75, false);
   Wings.set(false);
-  // chassis.turn_to_angle(270);
-  chassis.drive_distance(-15, 290,7,7);
+  // robot.turn_to_angle(270);
+  robot.drive_distance(-15, 290,7,7);
  
   VisionChase();*/
    /*
-  Controller1.Screen.print(chassis.get_absolute_heading());
+  Controller1.Screen.print(robot.get_absolute_heading());
 
   
-  chassis.drive_to_point(2, 5);
-  //chassis.set_drive_constants(12, 1.5, 0, 10, 0);
+  robot.drive_to_point(2, 5);
+  //robot.set_drive_constants(12, 1.5, 0, 10, 0);
   */
 
 }
 
-void SameSide_Score(){
-  chassis.set_drive_constants(12, 4, 0, 20, 0);
-  chassis.set_coordinates(0, 0, 270);
-  bool a = VisionChase(1);
-  chassis.drive_to_point(0, 0,12,12);
-  //chassis.drive_distance(-15, 270);
-  chassis.swing_speed_scalar(-45, 180, 12, 0.5, true);
-  chassis.turn_to_angle(180);
-  chassis.drive_distance(-13,180,12,12,chassis.drive_settle_error,0,700);
-  //chassis.drive_distance(10);
-  chassis.turn_to_angle(0);
-  //chassis.drive_distance(5);
+void Far_Score(){
+  robot.set_drive_constants(12, 4, 0, 20, 0);
+  robot.set_coordinates(0, 0, 270);
+
+  VisionChase(1,0.22,0.55,Vision21__GO,3000,8);
+
+  robot.drive_to_point(0, 0,12,12);
+ 
+  robot.swing_speed_scalar(-45, 180, 12, 0.5, true);
+  robot.turn_to_angle(180);
+  robot.drive_distance(-13,180,12,12,robot.drive_settle_error,0,700);
+ 
+  robot.turn_to_angle(0);
+
   Intake.spin(reverse,100,percent);
   wait(0.5,seconds);
  
- 
-  chassis.drive_distance(4,0,12,12,chassis.drive_settle_error,chassis.drive_settle_time,300);
-  chassis.drive_distance(-6);
-   Intake.stop();
+  robot.drive_distance(4,0,12,12,robot.drive_settle_error,robot.drive_settle_time,300);
+  robot.drive_distance(-6);
+  Intake.stop();
 
-  chassis.turn_to_angle(270);
+  robot.turn_to_angle(270);
   
-  chassis.drive_distance(15,290);
-  VisionChase1(2, Vision21__GO);
-  chassis.drive_distance(-10);
+  robot.drive_distance(15,290);
+  VisionChase(2, 0.22,0.55, Vision21__GO,4000,8);
+  robot.drive_distance(-10);
+
   Wings.set(true);
-  chassis.drive_distance(20,80,12,12,chassis.drive_settle_error,0,1000);
+  robot.drive_distance(20,80,12,12,robot.drive_settle_error,0,1000);
   Intake.spin(reverse,100,percent);
-  chassis.drive_distance(30,80,12,12,chassis.drive_settle_error,0,2000);
-  chassis.drive_distance(10);
+  robot.drive_distance(30,80,12,12,robot.drive_settle_error,0,2000);
+  robot.drive_distance(10);
 
 }
 
-void SameSide_NoMid(){
-  chassis.set_drive_constants(12, 4, 0, 20, 0);
-  chassis.set_coordinates(0, 0, 270);
-  bool a = VisionChase(1);
-  chassis.drive_to_point(0, 0);
-  //chassis.drive_distance(-15, 270);
-  chassis.swing_speed_scalar(-45, 180, 12, 0.5, true);
-  chassis.turn_to_angle(180);
-  chassis.drive_distance(-13,180,12,12,chassis.drive_settle_error,chassis.drive_settle_time,700);
-  chassis.drive_distance(10);
-  chassis.turn_to_angle(0);
-  chassis.drive_distance(5);
+////UNINFINSHED
+void Far_Score_Touch(){
+  robot.set_drive_constants(12, 4, 0, 20, 0);
+  robot.set_coordinates(0, 0, 270);
+  VisionChase(1,0.22,0.55,Vision21__GO,4000,8);
+  robot.drive_to_point(0, 0);
+  
+  robot.swing_speed_scalar(-45, 180, 12, 0.5, true);
+  robot.turn_to_angle(180);
+  robot.drive_distance(-13,180,12,12,robot.drive_settle_error,robot.drive_settle_time,700);
+  robot.drive_distance(10);
+  robot.turn_to_angle(0);
+  robot.drive_distance(5);
   Intake.spin(reverse,100,percent);
   wait(0.5,seconds);
  
-  chassis.drive_distance(-2);
-  chassis.drive_distance(6);
-  chassis.drive_distance(-4);
-   Intake.stop();
+  robot.drive_distance(-2);
+  robot.drive_distance(6);
+  robot.drive_distance(-4);
+  Intake.stop();
+
+  //ADD TOUCH
+
 }
 
-void Sit(){}
+void Sit(){} //Do Nothing
 
 void odom_constants(){
   default_constants();
-  chassis.drive_max_voltage = 8;
-  chassis.drive_settle_error = 3;
+  robot.drive_max_voltage = 8;
+  robot.drive_settle_error = 3;
 }
 
 void drive_test(){
-  chassis.drive_distance(6);
-  chassis.drive_distance(12);
-  chassis.drive_distance(18);
-  chassis.drive_distance(-36);
+  robot.drive_distance(6);
+  robot.drive_distance(12);
+  robot.drive_distance(18);
+  robot.drive_distance(-36);
 }
 
 void turn_test(){
-  chassis.turn_to_angle(5);
-  chassis.turn_to_angle(30);
-  chassis.turn_to_angle(90);
-  chassis.turn_to_angle(225);
-  chassis.turn_to_angle(0);
+  robot.turn_to_angle(5);
+  robot.turn_to_angle(30);
+  robot.turn_to_angle(90);
+  robot.turn_to_angle(225);
+  robot.turn_to_angle(0);
 }
 
 void swing_test(){
-  chassis.left_swing_to_angle(90);
-  chassis.right_swing_to_angle(0);
+  robot.left_swing_to_angle(90);
+  robot.right_swing_to_angle(0);
 }
 
 void full_test(){
-  chassis.drive_distance(24);
-  chassis.turn_to_angle(-45);
-  chassis.drive_distance(-36);
-  chassis.right_swing_to_angle(-90);
-  chassis.drive_distance(24);
-  chassis.turn_to_angle(0);
+  robot.drive_distance(24);
+  robot.turn_to_angle(-45);
+  robot.drive_distance(-36);
+  robot.right_swing_to_angle(-90);
+  robot.drive_distance(24);
+  robot.turn_to_angle(0);
 }
 
 void odom_test(){
-  chassis.set_coordinates(0, 0, 0);
+  robot.set_coordinates(0, 0, 0);
   while(1){
     Brain.Screen.clearScreen();
-    Brain.Screen.printAt(0,50, "X: %f", chassis.get_X_position());
-    Brain.Screen.printAt(0,70, "Y: %f", chassis.get_Y_position());
-    Brain.Screen.printAt(0,90, "Heading: %f", chassis.get_absolute_heading());
+    Brain.Screen.printAt(0,50, "X: %f", robot.get_X_position());
+    Brain.Screen.printAt(0,70, "Y: %f", robot.get_Y_position());
+    Brain.Screen.printAt(0,90, "Heading: %f", robot.get_absolute_heading());
     task::sleep(20);
   }
 }
 
 void tank_odom_test(){
   odom_constants();
-  chassis.set_coordinates(0, 0, 0);
-  chassis.turn_to_point(24, 24);
-  chassis.drive_to_point(24,24);
-  chassis.drive_to_point(0,0);
-  chassis.turn_to_angle(0);
+  robot.set_coordinates(0, 0, 0);
+  robot.turn_to_point(24, 24);
+  robot.drive_to_point(24,24);
+  robot.drive_to_point(0,0);
+  robot.turn_to_angle(0);
 }
 
 void VisTest(){
-  bool a = VisionChase1(2, Vision21__GO);
+  VisionChase(2, 0.22,0.55,Vision21__GO,4000,8);
 }

@@ -38,7 +38,7 @@
 using namespace vex;
 competition Competition;
 
-Drive chassis(
+Drive robot(
 ZERO_TRACKER_ODOM,
 
 //Left Motors:
@@ -77,8 +77,7 @@ void pre_auton(void) {
     Brain.Screen.clearScreen();            //brain screen for auton selection.
     switch(current_auton_selection){       //Tap the brain screen to cycle through autons.
       case 0:
-           Brain.Screen.printAt(50, 50, "SHILLS");
-       
+        Brain.Screen.printAt(50, 50, "SHILLS");
         break;
       case 1:
         Brain.Screen.printAt(50, 50, "Opposite Score Pre & Desc & Touch");
@@ -144,16 +143,16 @@ void autonomous(void) {
 }
 
 void usercontrol(void) {
-  chassis.set_coordinates(0,0,0);
+  robot.set_coordinates(0,0,0);
   Controller1.ButtonX.pressed(ToggleClimb);
   // User control code here, inside the loop
   while (1) {
-    //Replace this line with chassis.control_tank(); for tank drive 
-    chassis.control_arcade();
+    //Replace this line with robot.control_tank(); for tank drive 
+    robot.control_arcade();
     
-    Controller1.Screen.print(chassis.get_X_position());
+    Controller1.Screen.print(robot.get_X_position());
     Controller1.Screen.print(" ");
-    Controller1.Screen.print(chassis.get_Y_position());
+    Controller1.Screen.print(robot.get_Y_position());
     Controller1.Screen.newLine();
 
     if(Controller1.ButtonR1.pressing()){

@@ -3,18 +3,19 @@
 
 class Drive;
 
-extern Drive chassis;
+extern Drive robot;
 
 void default_constants();
 
-void OppSide_Desc_Mid();
-void Opp_WP();
-void OppSide_Desc_Score_Score();
-void SameSide_Score();
-void SameSide_NoMid();
+void Close_Mid_Score();
+void Close_Desc_Mid();
+void Close_Desc_Shoot_Touch();
+void Close_Score_Desc_Touch();
+
+void Far_Score();
+void Far_Score_Touch();
+
 void Sit();
-void VisTest();
-void Skills();
 
 void drive_test();
 void turn_test();
