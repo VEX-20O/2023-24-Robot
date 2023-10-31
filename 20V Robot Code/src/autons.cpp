@@ -56,21 +56,12 @@ bool VisionChase(float sp){
 }
 
 void Skills(){
-  PunchMotor.spin(reverse, 100, percent);
-/*
-  chassis.drive_distance(35);
-  chassis.turn_to_angle(90);
-  Intake.spin(forward,100,percent);
-  chassis.drive_distance(100, 90, 13, 13,chassis.drive_settle_error,chassis.drive_settle_time,5000);
-  Intake.spin(reverse,100,percent);
-  chassis.drive_distance(40,90,13,13);
-  */
-  /*
+ 
  chassis.drive_distance(25);
   chassis.turn_to_angle(45);
   chassis.drive_distance(-25, chassis.get_absolute_heading(), 13, 13,chassis.drive_settle_error,chassis.drive_settle_time,900);
   PunchMotor.spin(reverse, 100, percent);
-  wait(2,seconds);
+  wait(4,seconds);
   PunchMotor.stop();
   chassis.drive_distance(40);
   chassis.turn_to_angle(0);
@@ -81,11 +72,10 @@ void Skills(){
    chassis.drive_distance(100, 90, 13, 13,chassis.drive_settle_error,chassis.drive_settle_time,5000);
   Intake.spin(reverse,100,percent);
   chassis.drive_distance(40,90,13,13);
-*/
 }
 
-bool VisionChase1(float sp){
-  Vision21.takeSnapshot(Vision21__GO); 
+bool VisionChase1(float sp, vex::vision::signature vis){
+  Vision21.takeSnapshot(vis); 
   if(Vision21.objects[0].exists){
     Controller1.Screen.print("A");
     /*if (Vision21.objects[0].height < 40){
@@ -96,7 +86,7 @@ bool VisionChase1(float sp){
     while (1) {
       Controller1.Screen.print("C");
       bool aligned1=true;
-      Vision21.takeSnapshot(Vision21__GO); 
+      Vision21.takeSnapshot(vis); 
 
       float kdp = 0.22;
       double visXerr = v_screen_width/2.0-Vision21.objects[0].centerX;
@@ -150,6 +140,66 @@ void default_constants(){
 
 void OppSide_Desc_Mid(){
 
+  chassis.set_coordinates(0, 0, 0);
+
+  chassis.drive_distance(40,20,12,10);
+  chassis.drive_distance(20,5);
+  Intake.spin(forward,100,percent);
+  chassis.drive_distance(7);
+  wait(0.4, sec);
+  Intake.stop();
+      chassis.right_swing_to_angle(90,12,chassis.swing_settle_error,chassis.swing_settle_time,600,chassis.swing_kp,chassis.swing_ki,chassis.swing_kd,chassis.swing_starti);
+      
+     
+      chassis.drive_distance(32,90,12,chassis.heading_max_voltage,chassis.drive_settle_error,chassis.drive_settle_time,2000);      
+       Intake.spin(reverse, 100, percent);
+      wait(0.3, seconds);
+      Intake.stop();
+      chassis.drive_distance(-4);
+
+
+      
+      chassis.turn_to_angle(0);
+      Wings.set(true);
+      chassis.drive_distance(13,0);
+      Wings.set(false);
+      chassis.drive_distance(-20,20);
+      chassis.turn_to_angle(210);
+      Intake.spin(forward,100,percent);
+      chassis.drive_distance(44,218);
+      Intake.stop();
+      chassis.turn_to_angle(315);
+      //chassis.swing_speed_scalar(24, 355, 12, 1, false);
+      chassis.drive_distance(17);
+      Intake.spin(reverse,100,percent);
+      chassis.drive_distance(9,0);
+
+   chassis.drive_distance(4,0,12,12);
+   Intake.stop();
+
+   /*
+  chassis.swing_speed_scalar(-22, 315, 6.5, 0.35, true);
+  wait(0.5,sec);
+  Wings.set(true);
+   chassis.swing_speed_scalar(-15, 270, 12, 0.1, false);
+   Wings.set(false);
+   chassis.drive_distance(7);
+   chassis.turn_to_angle(135);
+   chassis.drive_distance(-10);
+   chassis.drive_distance(3);
+  chassis.drive_distance(29, 90, 11, 5);
+  Wings.set(true);
+  
+  chassis.drive_distance(18);
+
+      //bool a = VisionChase1(1, Vision21__GO);
+*/
+     
+}
+
+/*
+void OppSide_Desc_Mid(){
+
   chassis.set_coordinates(0, 0, 315);
 
   chassis.drive_distance(8,315);
@@ -185,7 +235,7 @@ void OppSide_Desc_Mid(){
 
       }
       
-}
+}*/
 
 void Opp_WP(){
   chassis.set_coordinates(0, 0, 315);
@@ -221,7 +271,8 @@ void OppSide_Desc_Score_Score(){
   
   chassis.set_drive_constants(12, 4, 0, 20, 0);
   chassis.swing_speed_scalar(25, 315, 12, 0.5, true);
-  chassis.swing_speed_scalar(15, 0, 12, 0.5, false);
+  
+  //CODE MISSING HERE ^^^^^^
  
   Intake.spin(reverse,100,percent);
   wait(0.5,seconds);
@@ -287,7 +338,7 @@ void SameSide_Score(){
   chassis.turn_to_angle(270);
   
   chassis.drive_distance(15,290);
-  VisionChase1(2);
+  VisionChase1(2, Vision21__GO);
   chassis.drive_distance(-10);
   Wings.set(true);
   chassis.drive_distance(20,80,12,12,chassis.drive_settle_error,0,1000);
@@ -376,5 +427,5 @@ void tank_odom_test(){
 }
 
 void VisTest(){
-  bool a = VisionChase1(2);
+  bool a = VisionChase1(2, Vision21__GO);
 }

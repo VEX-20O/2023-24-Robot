@@ -116,8 +116,8 @@ void autonomous(void) {
   auto_started = true;
   switch(current_auton_selection){  
     case 0:
-     Skills();
-       
+    
+       OppSide_Desc_Mid();
        break;     
     case 1:        
       OppSide_Desc_Score_Score();
@@ -126,7 +126,7 @@ void autonomous(void) {
       Sit();
       break;
     case 3:
-       OppSide_Desc_Mid();
+        Skills();
       break;
     case 4:
       SameSide_NoMid();
