@@ -33,6 +33,7 @@ void Sit();
 
 void Far_Score_MidS();
 void TestA();
+void VisionChase(float speed, float pturn, float pdrive, vex::vision::signature vis, float timeout, float lungedist);
 
 void drive_test();
 void turn_test();
