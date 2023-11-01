@@ -46,6 +46,7 @@ void VisionChase(float speed, float pturn, float pdrive, vex::vision::signature 
         Intake.spin(forward,100, percent);    
         robot.drive_distance(lungedist,robot.get_absolute_heading(),3,3,robot.drive_settle_error,robot.drive_settle_time,500);
         Intake.stop(brake);
+        return;
       }
     }
   }
@@ -112,8 +113,8 @@ void Close_Mid_Score(){
   Intake.spin(reverse,100,percent);
   robot.drive_distance(9,0);
 
-   robot.drive_distance(4,0,12,12);
-   Intake.stop();
+  robot.drive_distance(4,0,12,12);
+  Intake.stop();
      
 }
 
@@ -191,43 +192,35 @@ void Close_Score_Desc_Touch(){
   robot.swing_speed_scalar(-25, 315, 6.5, 0.35, true);
   wait(0.5,sec);
   Wings.set(true);
-   robot.swing_speed_scalar(-15, 270, 12, 0.1, false);
-   Wings.set(false);
-   robot.drive_distance(7);
-   robot.turn_to_angle(135);
-   robot.drive_distance(-10);
-   robot.drive_distance(3);
-  robot.drive_distance(29, 90, 11, 5);
-  Wings.set(true);
-  
-  robot.drive_distance(18);
-   //bool didsee = VisionChase();
-    
-    //robot.turn_to_angle(90);
-    //robot.drive_distance(50);
-  /*robot.drive_to_point(16, -16);
-  Wings.set(true);
-  robot.swing_speed_scalar(15, 0, 12, 0.75, false);
+  robot.swing_speed_scalar(-15, 270, 12, 0.1, false);
   Wings.set(false);
-  // robot.turn_to_angle(270);
-  robot.drive_distance(-15, 290,7,7);
- 
-  VisionChase();*/
-   /*
-  Controller1.Screen.print(robot.get_absolute_heading());
-
+  robot.drive_distance(7);
+  robot.turn_to_angle(135);
+  robot.drive_distance(-10);
+  robot.drive_distance(3);
+  robot.drive_distance(26, 90, 11, 5);
+  Wings.set(true);
   
-  robot.drive_to_point(2, 5);
-  //robot.set_drive_constants(12, 1.5, 0, 10, 0);
-  */
+  robot.drive_distance(22);
 
+}
+
+void Far_Score_MidS(){
+  
+  robot.drive_distance(35,355);
 }
 
 void Far_Score(){
   robot.set_drive_constants(12, 4, 0, 20, 0);
   robot.set_coordinates(0, 0, 270);
+  
+  //VisionChase(1,0.22,0.55,Vision21__GO,3000,8);
+  Intake.spin(forward,100,percent);
 
-  VisionChase(1,0.22,0.55,Vision21__GO,3000,8);
+  robot.drive_distance(20,270);
+
+  Intake.stop();
+
 
   robot.drive_to_point(0, 0,12,12);
  
@@ -247,7 +240,8 @@ void Far_Score(){
   robot.turn_to_angle(270);
   
   robot.drive_distance(15,290);
-  VisionChase(2, 0.22,0.55, Vision21__GO,4000,8);
+  VisionChase(2, 0.22,0.55, Vision21__GO,4000,8); //FIX HERE
+  
   robot.drive_distance(-10);
 
   Wings.set(true);

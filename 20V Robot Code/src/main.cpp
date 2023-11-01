@@ -7,6 +7,23 @@
 // DriveR1              motor         9               
 // DriveR2              motor         8               
 // DriveR3              motor         10              
+// Inertial11           inertial      11              
+// Controller1          controller                    
+// Wings                digital_out   H               
+// PunchMotor           motor         5               
+// Climb                digital_out   G               
+// Intake               motor_group   4, 7            
+// Vision21             vision        21              
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// DriveL1              motor         1               
+// DriveL2              motor         2               
+// DriveL3              motor         3               
+// DriveR1              motor         9               
+// DriveR2              motor         8               
+// DriveR3              motor         10              
 // Inertial6            inertial      6               
 // Controller1          controller                    
 // Wings                digital_out   H               
@@ -48,7 +65,7 @@ motor_group(DriveL1,DriveL2,DriveL3),
 motor_group(DriveR1,DriveR2,DriveR3),
 
 //PORT NUMBER of inertial
-PORT6,
+PORT11,
 
 //Wheel Dia
 3.25,
@@ -125,7 +142,10 @@ void autonomous(void) {
   auto_started = true;
   switch(current_auton_selection){  
     case 0:
-      Skills();
+      //Skills();
+      //Far_Score();
+      Close_Mid_Score();
+      //Close_Score_Desc_Touch();
       break;     
     case 1:        
       Close_Desc_Mid();
@@ -157,7 +177,7 @@ void usercontrol(void) {
   // User control code here, inside the loop
   while (1) {
     //Replace this line with robot.control_tank(); for tank drive 
-    robot.control_arcade(0.2);
+    robot.control_arcade(0.5);
     
     Controller1.Screen.print(robot.get_X_position());
     Controller1.Screen.print(" ");

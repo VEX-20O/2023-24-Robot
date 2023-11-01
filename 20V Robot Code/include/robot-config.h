@@ -11,7 +11,7 @@ extern motor DriveL3;
 extern motor DriveR1;
 extern motor DriveR2;
 extern motor DriveR3;
-extern inertial Inertial6;
+extern inertial Inertial11;
 extern controller Controller1;
 extern digital_out Wings;
 extern motor PunchMotor;

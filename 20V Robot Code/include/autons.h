@@ -10,10 +10,10 @@ void default_constants();
 #define AUTO1 "Skills"
 void Skills();
 
-#define AUTO2 "Close Knock Mid-Score"
+#define AUTO2 "Close Desc-Shoot-Over Mid"
 void Close_Mid_Score();
 
-#define AUTO3 "Close Desc-Mid Over"
+#define AUTO3 "Close Knock Mid-Score"
 void Close_Desc_Mid();
 
 #define AUTO4 "Close Desc-Shoot-Touch"
@@ -30,6 +30,9 @@ void Far_Score_Touch();
 
 #define AUTO8 "Do Nothing"
 void Sit();
+
+void Far_Score_MidS();
+void TestA();
 
 void drive_test();
 void turn_test();

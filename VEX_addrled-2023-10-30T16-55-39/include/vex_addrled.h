@@ -19,7 +19,7 @@ class addressable_led {
        int32_t _id;
   
     public:
-      addressable_led( triport::port &port, int32_t max = MAX_LEDS ) {
+      addressable_led( triport::port port, int32_t max = MAX_LEDS ) {
         port.type( triportType::digitalOutput );
         _index = port.index();
         _id = port.id();
