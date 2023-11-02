@@ -143,7 +143,8 @@ void autonomous(void) {
   switch(current_auton_selection){  
     case 0:
       //Skills();
-      Far_Score();
+      //Far_Score();
+      Far_Score_Touch();
       //Close_Mid_Score();
       //Close_Score_Desc_Touch();
       break;     

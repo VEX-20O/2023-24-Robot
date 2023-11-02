@@ -151,42 +151,58 @@ void Far_Score(){
   robot.drive_distance(30,80,12,12,robot.drive_settle_error,0,2000);
   robot.drive_distance(10);
 
-  /*
-  //VisionChase(2, 0.22,0.55, Vision21__GO,4000,8); //FIX HERE
-  
-  robot.drive_distance(-10);
-
-  Wings.set(true);
-  robot.drive_distance(20,80,12,12,robot.drive_settle_error,0,1000);
-  Intake.spin(reverse,100,percent);
-  robot.drive_distance(30,80,12,12,robot.drive_settle_error,0,2000);
-  robot.drive_distance(10);
-*/
 }
 
 ////UNINFINSHED
 void Far_Score_Touch(){
-  robot.set_drive_constants(12, 4, 0, 20, 0);
-  robot.set_coordinates(0, 0, 270);
-  VisionChase(1,0.22,0.55,Vision21__GO,4000,8);
-  robot.drive_to_point(0, 0);
   
-  robot.swing_speed_scalar(-45, 180, 12, 0.5, true);
-  robot.turn_to_angle(180);
-  robot.drive_distance(-13,180,12,12,robot.drive_settle_error,robot.drive_settle_time,700);
-  robot.drive_distance(10);
+
+  robot.set_coordinates(0, 0, 270);
+  default_constants();
+
+
+  Intake.spin(forward,100,percent);
+
+  robot.drive_distance(20,270,6,6);
+  Intake.stop();
+  
+  robot.drive_distance(-36.5,270); //change to -36
+   
+
+  robot.swing_speed_scalar(-25, 225, 7, 0.35, true);
+  wait(0.5,sec);
+ Wings.set(true);
+ robot.left_swing_to_angle(180);
+  //robot.swing_speed_scalar(-15, 180, 12, 0.1, false);
+  Wings.set(false);
   robot.turn_to_angle(0);
-  robot.drive_distance(5);
+  Intake.spin(reverse,100,percent);
+  robot.drive_distance(10,10);
+   
+   //robot.drive_distance(-10,180,8,3);
+    //robot.swing_speed_scalar(-15, 180, 12, 0.1, false);
+ 
+ /*
+  robot.swing_speed_scalar(-44, 180, 12, 0.5, true);
+
+  robot.turn_to_angle(180);
+  robot.drive_distance(-13,180,12,12,robot.drive_settle_error,0,700);
+  robot.drive_distance(4);
+
+  robot.turn_to_angle(0);
+
   Intake.spin(reverse,100,percent);
   wait(0.5,seconds);
  
-  robot.drive_distance(-2);
-  robot.drive_distance(6);
-  robot.drive_distance(-4);
+  robot.drive_distance(4,0,12,12,robot.drive_settle_error,robot.drive_settle_time,300);
+  robot.drive_distance(-6);
   Intake.stop();
 
-  //ADD TOUCH
+   //robot.drive_distance(-4);
+  robot.turn_to_angle(270);
 
+  //add touch
+*/
 }
 
 void Close_Score_Desc_Touch(){
