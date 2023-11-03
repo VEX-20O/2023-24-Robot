@@ -57,7 +57,8 @@ using namespace vex;
 competition Competition;
 
 Drive robot(
-ZERO_TRACKER_ODOM,
+
+ZERO_TRACKER_ODOM, 
 
 //Left Motors:
 motor_group(DriveL1,DriveL2,DriveL3),
@@ -98,30 +99,37 @@ void pre_auton(void) {
       case 0:
         Controller1.Screen.print(AUTO1);
         Brain.Screen.printAt(50, 50, AUTO1);
+        DrawAuto1();
         break;
       case 1:
         Controller1.Screen.print(AUTO2);
         Brain.Screen.printAt(50, 50, AUTO2);
+        DrawAuto2();
         break;
       case 2:
         Controller1.Screen.print(AUTO3);
         Brain.Screen.printAt(50, 50, AUTO3);
+        DrawAuto3();
         break;
       case 3:
         Controller1.Screen.print(AUTO4);
         Brain.Screen.printAt(50, 50, AUTO4);
+          DrawAuto4();
         break;
       case 4:
         Controller1.Screen.print(AUTO5);
         Brain.Screen.printAt(50, 50, AUTO5);
+        DrawAuto5();
         break;
       case 5:
         Controller1.Screen.print(AUTO6);
         Brain.Screen.printAt(50, 50, AUTO6);
+        DrawAuto6();
         break;
       case 6:
         Controller1.Screen.print(AUTO7);
         Brain.Screen.printAt(50, 50, AUTO7);
+        DrawAuto7();
         break;
       case 7:
         Controller1.Screen.print(AUTO8);
@@ -134,7 +142,7 @@ void pre_auton(void) {
     } else if (current_auton_selection == 8){
       current_auton_selection = 0;
     }
-    task::sleep(10);
+    task::sleep(100);
   }
 }
 

@@ -1,20 +1,17 @@
 #include "vex.h"
 #include <cmath>
 
-
 void default_constants(){
   robot.set_drive_constants(10, 1.5, 0, 10, 0);
   robot.set_heading_constants(6, .4, 0, 1, 0);
   robot.set_turn_constants(12, .4, .03, 3, 15);
   robot.set_swing_constants(12, .3, .001, 2, 15);
   robot.set_drive_exit_conditions(1.5, 300, 5000);
-  
   robot.set_turn_exit_conditions(1, 300, 3000);
   robot.set_swing_exit_conditions(1, 300, 3000);
 }
 
 void Skills(){
- 
   robot.drive_distance(25);
   robot.turn_to_angle(45);
   robot.drive_distance(-25, robot.get_absolute_heading(), 13, 13,robot.drive_settle_error,robot.drive_settle_time,900);
@@ -27,7 +24,7 @@ void Skills(){
   robot.drive_distance(35);
   robot.turn_to_angle(90);
   Intake.spin(forward,100,percent);
-   robot.drive_distance(100, 90, 13, 13,robot.drive_settle_error,robot.drive_settle_time,5000);
+  robot.drive_distance(100, 90, 13, 13,robot.drive_settle_error,robot.drive_settle_time,5000);
   Intake.spin(reverse,100,percent);
   robot.drive_distance(40,90,13,13);
 }
@@ -87,6 +84,7 @@ void Close_Desc_Mid(){
   robot.swing_speed_scalar(40, 0, 12, 1, false);
 
   Vision21.takeSnapshot(Vision21__GO);
+
   if(Vision21.objects[0].exists&&Vision21.objects[0].height > 50){
     Intake.spin(forward,100,percent);
     robot.drive_distance(11);
@@ -108,18 +106,15 @@ void Far_Score_MidS(){
 
 void Far_Score(){
   robot.set_drive_constants(12, 4, 0, 20, 0);
-  //robot.set_drive_constants(12, 10, 10, 10  , float drive_starti)
   robot.set_coordinates(0, 0, 270);
   robot.set_drive_exit_conditions(1.5, 0, 1000);
-  //VisionChase(1,0.22,0.55,Vision21__GO,3000,8);
+
   Intake.spin(forward,100,percent);
 
   robot.drive_distance(20,270);
 
- 
-
   robot.drive_to_point(0, 0,12,12);
-   Intake.stop();
+  Intake.stop();
  
   robot.swing_speed_scalar(-44, 180, 12, 0.5, true);
 
@@ -136,7 +131,7 @@ void Far_Score(){
   robot.drive_distance(-6);
   Intake.stop();
 
-   //robot.drive_distance(-4);
+  //robot.drive_distance(-4);
   robot.turn_to_angle(270);
   
   Intake.spin(forward,100,percent);
@@ -153,8 +148,7 @@ void Far_Score(){
 
 }
 
-////UNINFINSHED
-void Far_Score_Touch(){
+void Far_Score_Touch(){ //scores 3 and touches
   
 
   robot.set_coordinates(0, 0, 270);
@@ -163,46 +157,42 @@ void Far_Score_Touch(){
 
   Intake.spin(forward,100,percent);
 
-  robot.drive_distance(20,270,6,6);
+  robot.drive_distance(22,270,6,6);
   Intake.stop();
   
-  robot.drive_distance(-36.5,270); //change to -36
+  robot.drive_distance(-43,270); 
    
+  robot.turn_to_angle(45);
+  robot.drive_distance(10,60,12,12);
 
-  robot.swing_speed_scalar(-25, 225, 7, 0.35, true);
+
   wait(0.5,sec);
- Wings.set(true);
- robot.left_swing_to_angle(180);
-  //robot.swing_speed_scalar(-15, 180, 12, 0.1, false);
-  Wings.set(false);
-  robot.turn_to_angle(0);
+  Wings.set(true);
+  robot.right_swing_to_angle(0);
   Intake.spin(reverse,100,percent);
-  robot.drive_distance(10,10);
-   
-   //robot.drive_distance(-10,180,8,3);
-    //robot.swing_speed_scalar(-15, 180, 12, 0.1, false);
+   wait(0.2,seconds);
+    Wings.set(false);
+ // robot.drive_distance(10,30,12,12);
+ // Intake.spin(reverse,100,percent);
  
- /*
-  robot.swing_speed_scalar(-44, 180, 12, 0.5, true);
-
-  robot.turn_to_angle(180);
-  robot.drive_distance(-13,180,12,12,robot.drive_settle_error,0,700);
-  robot.drive_distance(4);
-
-  robot.turn_to_angle(0);
-
-  Intake.spin(reverse,100,percent);
-  wait(0.5,seconds);
  
-  robot.drive_distance(4,0,12,12,robot.drive_settle_error,robot.drive_settle_time,300);
-  robot.drive_distance(-6);
   Intake.stop();
+  robot.turn_to_angle(215);
+  robot.drive_distance(-10,225);
+  /*
+  //test from here
+  robot.drive_distance(-9);
+  
 
-   //robot.drive_distance(-4);
-  robot.turn_to_angle(270);
+  robot.turn_to_angle(215);
 
-  //add touch
-*/
+  robot.drive_distance(-20,200);
+
+  
+  robot.drive_distance(33,225);
+  Wings.set(true);
+  robot.drive_distance(37,270);
+ */
 }
 
 void Close_Score_Desc_Touch(){

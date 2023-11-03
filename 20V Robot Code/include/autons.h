@@ -9,24 +9,31 @@ void default_constants();
 
 #define AUTO1 "Skills"
 void Skills();
+void DrawAuto1();
 
 #define AUTO2 "Close Desc-Shoot-Over Mid"
 void Close_Mid_Score();
+void DrawAuto2();
 
 #define AUTO3 "Close Knock Mid-Score"
 void Close_Desc_Mid();
+void DrawAuto3();
 
 #define AUTO4 "Close Desc-Shoot-Touch"
 void Close_Desc_Shoot_Touch();
+void DrawAuto4();
 
 #define AUTO5 "Close Score-Desc-Touch"
 void Close_Score_Desc_Touch();
+void DrawAuto5();
 
 #define AUTO6 "Far Score 3"
 void Far_Score();
+void DrawAuto6();
 
 #define AUTO7 "Far Score 2-Touch"
 void Far_Score_Touch();
+void DrawAuto7();
 
 #define AUTO8 "Do Nothing"
 void Sit();
