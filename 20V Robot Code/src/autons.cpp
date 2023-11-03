@@ -184,7 +184,7 @@ void Far_Score_Touch(){ //scores 3 and touches
 
   Intake.spin(forward,100,percent);
 
-  robot.drive_distance(22,270,6,6);
+  robot.drive_distance(20,270,12,12);
   Intake.stop();
   
   robot.drive_distance(-43,270); 
@@ -194,14 +194,18 @@ void Far_Score_Touch(){ //scores 3 and touches
 
   wait(0.5,sec);
   Wings.set(true);
-  robot.right_swing_to_angle(0,12);
+  robot.right_swing_to_angle(0,12,robot.swing_settle_error,robot.swing_settle_time,700,robot.swing_kp,robot.swing_ki,robot.swing_kd,robot.swing_starti);
   Intake.spin(reverse,100,percent);
-  wait(0.2,seconds);
+  wait(0.4,seconds);
   Wings.set(false);
  
   Intake.stop();
   robot.turn_to_angle(215);
   robot.drive_distance(-20,195,12,12,robot.drive_settle_error,robot.drive_settle_time,500);
+  
+  robot.drive_distance(30,225);
+  Wings.set(true);
+  robot.drive_distance(41,270);
   /*
   //test from here
   robot.drive_distance(-9);
