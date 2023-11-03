@@ -58,23 +58,23 @@ void DrawAuto5(){DrawField();
   Brain.Screen.setPenColor(red);
   Brain.Screen.drawRectangle(115, 200, 30, -30);
   Brain.Screen.setPenColor(green);
-  Brain.Screen.drawRectangle(50+15+50, 200, 16, -16);
-  Brain.Screen.drawRectangle(115, 200-15, 15, -15);
+  Brain.Screen.drawRectangle(15+50+50, 200, -16, -16);
+  Brain.Screen.drawRectangle(115+22, 200-15, -15, -15);
   Brain.Screen.setPenColor(white);
 }
 void DrawAuto6(){DrawField();
   Brain.Screen.setPenColor(red);
-  Brain.Screen.drawRectangle(300, 195, 30, -30);
+  Brain.Screen.drawRectangle(300, 197, 30, -30);
   Brain.Screen.setPenColor(green);
-  Brain.Screen.drawRectangle(50+15+200, 150, 16, 16);
-  Brain.Screen.drawRectangle(250, 200-15, 15, -15);
+  Brain.Screen.drawRectangle(480-100+15, 150, 16, 16);
+  Brain.Screen.drawRectangle(480-150, 200-15, 15, -15);
   Brain.Screen.setPenColor(white);
 }
 void DrawAuto7(){DrawField();
   Brain.Screen.setPenColor(red);
-  Brain.Screen.drawRectangle(300, 195, 30, -30);
+  Brain.Screen.drawRectangle(300, 197, 30, -30);
   Brain.Screen.setPenColor(green);
-  Brain.Screen.drawRectangle(50+15+200, 150, 16, 16);
-  Brain.Screen.drawRectangle(250, 200-15, 15, -15);
+  Brain.Screen.drawRectangle(480-100+15, 150, 16, 16);
+  Brain.Screen.drawRectangle(480-150, 200-15, 15, -15);
   Brain.Screen.setPenColor(white);
 }
