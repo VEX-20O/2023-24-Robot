@@ -248,7 +248,7 @@ void Close_Score_Desc_Touch(){
   robot.drive_distance(26, 90, 11, 5);
   Wings.set(true);
   
-  robot.drive_distance(22);
+  robot.drive_distance(23.5);
 
 }
 

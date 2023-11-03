@@ -152,9 +152,9 @@ void autonomous(void) {
     case 0:
       //Skills();
       //Far_Score();
-      Far_Score_Touch();
+      //Far_Score_Touch();
       //Close_Mid_Score();
-      //Close_Score_Desc_Touch();
+      Close_Score_Desc_Touch();
       break;     
     case 1:        
       Close_Desc_Mid();
