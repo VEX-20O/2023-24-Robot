@@ -138,22 +138,49 @@ void Far_Score(){
   robot.drive_distance(49.5,290);
 
   //after here
+
   robot.drive_distance(-10);
 
+  robot.turn_to_angle(40);
+  Intake.spin(reverse,60,percent);
+  wait(0.5,seconds);
+  Intake.stop();
+  Intake.spin(forward,100,percent);
+
+  robot.drive_distance(30, 355,7,7);
+  
+  robot.turn_to_angle(90);
+  Intake.spin(reverse,100,percent);
+  Wings.set(true);
+  robot.drive_distance(21);
+  Wings.set(false);
+  robot.turn_to_angle(270);
+  Intake.spin(forward,100,percent);
+  
+  robot.drive_distance(23,270,12,12);
+  robot.turn_to_angle(90);
+  Intake.spin(reverse,100,percent);
+  Wings.set(true);
+  robot.drive_distance(23,90,12,12);
+
+  
+ 
+
+
+
+/*
   Wings.set(true);
   robot.drive_distance(20,70,12,12,robot.drive_settle_error,0,1000);
   Intake.spin(reverse,100,percent);
   robot.drive_distance(30,80,12,12,robot.drive_settle_error,0,2000);
   robot.drive_distance(10);
-
+*/
 }
 
 void Far_Score_Touch(){ //scores 3 and touches
   
-
   robot.set_coordinates(0, 0, 270);
   default_constants();
-
 
   Intake.spin(forward,100,percent);
 
@@ -163,22 +190,18 @@ void Far_Score_Touch(){ //scores 3 and touches
   robot.drive_distance(-43,270); 
    
   robot.turn_to_angle(45);
-  robot.drive_distance(10,60,12,12);
-
+  robot.drive_distance(9,60,12,12);
 
   wait(0.5,sec);
   Wings.set(true);
-  robot.right_swing_to_angle(0);
+  robot.right_swing_to_angle(0,12);
   Intake.spin(reverse,100,percent);
-   wait(0.2,seconds);
-    Wings.set(false);
- // robot.drive_distance(10,30,12,12);
- // Intake.spin(reverse,100,percent);
- 
+  wait(0.2,seconds);
+  Wings.set(false);
  
   Intake.stop();
   robot.turn_to_angle(215);
-  robot.drive_distance(-10,225);
+  robot.drive_distance(-20,195,12,12,robot.drive_settle_error,robot.drive_settle_time,500);
   /*
   //test from here
   robot.drive_distance(-9);
@@ -249,8 +272,6 @@ void Close_Desc_Shoot_Touch(){
   robot.drive_distance(45);  
 
 }
-
-
 
 void Sit(){} //Do Nothing
 
