@@ -12,16 +12,16 @@ void default_constants(){
 }
 
 void Skills(){
-  robot.drive_distance(25);
-  robot.turn_to_angle(45);
-  robot.drive_distance(-25, robot.get_absolute_heading(), 13, 13,robot.drive_settle_error,robot.drive_settle_time,900);
+  robot.drive_distance(15);
+  robot.turn_to_angle(65);
+  robot.drive_distance(-10, robot.get_absolute_heading(), 13, 13,robot.drive_settle_error,robot.drive_settle_time,900);
   PunchMotor.spin(reverse, 100, percent);
-  wait(4,seconds);
+  wait(15,seconds);
   PunchMotor.stop();
-  robot.drive_distance(40);
+  robot.drive_distance(40,40);
   robot.turn_to_angle(0);
   Wings.set(true);
-  robot.drive_distance(35);
+  robot.drive_distance(30);
   robot.turn_to_angle(90);
   Intake.spin(forward,100,percent);
   robot.drive_distance(100, 90, 13, 13,robot.drive_settle_error,robot.drive_settle_time,5000);
