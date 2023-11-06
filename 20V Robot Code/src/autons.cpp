@@ -12,11 +12,11 @@ void default_constants(){
 }
 
 void Skills(){
-  robot.drive_distance(15);
-  robot.turn_to_angle(65);
-  robot.drive_distance(-10, robot.get_absolute_heading(), 13, 13,robot.drive_settle_error,robot.drive_settle_time,900);
+  robot.drive_distance(15,0);
+  robot.turn_to_angle(65,7);
+  robot.drive_distance(-15, robot.get_absolute_heading(), 13, 13,robot.drive_settle_error,robot.drive_settle_time,900);
   PunchMotor.spin(reverse, 100, percent);
-  wait(15,seconds);
+  wait(42,seconds);
   PunchMotor.stop();
   robot.drive_distance(40,40);
   robot.turn_to_angle(0);
@@ -26,7 +26,8 @@ void Skills(){
   Intake.spin(forward,100,percent);
   robot.drive_distance(100, 90, 13, 13,robot.drive_settle_error,robot.drive_settle_time,5000);
   Intake.spin(reverse,100,percent);
-  robot.drive_distance(40,90,13,13);
+  robot.drive_distance(40,90,13,13,robot.drive_settle_error,robot.drive_settle_time,3000);
+  robot.drive_distance(-30);
 }
 
 void Close_Mid_Score(){
@@ -135,19 +136,19 @@ void Far_Score(){
   robot.turn_to_angle(270);
   
   Intake.spin(forward,100,percent);
-  robot.drive_distance(49.5,290);
+  robot.drive_distance(52,290);
 
   //after here
 
-  robot.drive_distance(-10);
+  robot.drive_distance(-12);
 
   robot.turn_to_angle(40);
-  Intake.spin(reverse,60,percent);
+  Intake.spin(reverse,63,percent);
   wait(0.5,seconds);
   Intake.stop();
   Intake.spin(forward,100,percent);
 
-  robot.drive_distance(30, 355,7,7);
+  robot.drive_distance(28, 355,7,7);
   
   robot.turn_to_angle(90);
   Intake.spin(reverse,100,percent);
@@ -233,7 +234,7 @@ void Close_Score_Desc_Touch(){
   Intake.spin(reverse,100,percent);
   wait(0.5,seconds);
   Intake.stop();
-  robot.set_coordinates(0, 0, robot.get_absolute_heading());
+  //robot.set_coordinates(0, 0, robot.get_absolute_heading());
    robot.drive_distance(2);
   robot.drive_distance(-2);
   robot.swing_speed_scalar(-25, 315, 6.5, 0.35, true);
@@ -243,7 +244,7 @@ void Close_Score_Desc_Touch(){
   Wings.set(false);
   robot.drive_distance(7);
   robot.turn_to_angle(135);
-  robot.drive_distance(-10);
+  robot.drive_distance(-12);
   robot.drive_distance(3);
   robot.drive_distance(26, 90, 11, 5);
   Wings.set(true);

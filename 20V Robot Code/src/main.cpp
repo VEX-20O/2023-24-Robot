@@ -221,7 +221,7 @@ void usercontrol(void) {
       Wings.set(false);
     }
 
-    if(Controller1.ButtonX.pressing())
+    if(Controller1.ButtonA.pressing())
     {
       Climb.set(true);
     }else{
