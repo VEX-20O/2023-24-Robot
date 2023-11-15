@@ -11,47 +11,14 @@
 // Controller1          controller                    
 // Wings                digital_out   H               
 // PunchMotor           motor         5               
-// Climb                digital_out   G               
-// Intake               motor_group   4, 7            
 // Vision21             vision        21              
+// Intake               motor         4               
+// Blocker              digital_out   G               
+// Climb                digital_out   E               
 // ---- END VEXCODE CONFIGURED DEVICES ----
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// DriveL1              motor         1               
-// DriveL2              motor         2               
-// DriveL3              motor         3               
-// DriveR1              motor         9               
-// DriveR2              motor         8               
-// DriveR3              motor         10              
-// Inertial6            inertial      6               
-// Controller1          controller                    
-// Wings                digital_out   H               
-// PunchMotor           motor         5               
-// Climb                digital_out   G               
-// Intake               motor_group   4, 7            
-// Vision21             vision        21              
-// ---- END VEXCODE CONFIGURED DEVICES ----
+
 #include "vex.h"
 #include <string>
-
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// DriveL1              motor         1               
-// DriveL2              motor         2               
-// DriveL3              motor         3               
-// DriveR1              motor         9               
-// DriveR2              motor         8               
-// DriveR3              motor         10              
-// Inertial6            inertial      6               
-// Controller1          controller                    
-// Wings                digital_out   H               
-// PunchMotor           motor         5               
-// Climb                digital_out   G               
-// Intake               motor_group   4, 7            
-// Vision21             vision        21              
-// ---- END VEXCODE CONFIGURED DEVICES ----
 
 using namespace vex;
 competition Competition;
@@ -85,7 +52,7 @@ PORT11,
 int current_auton_selection = 0;
 bool auto_started = false;
 
-void ToggleClimb();
+void ToggleBlock();
 
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
@@ -150,8 +117,8 @@ void autonomous(void) {
   auto_started = true;
   switch(current_auton_selection){  
     case 0:
-      Skills();
-      //Far_Score();
+      //Skills();
+      Far_Score();
       //Far_Score_Touch();
       //Close_Mid_Score();
       //Close_Score_Desc_Touch();
@@ -181,12 +148,16 @@ void autonomous(void) {
 }
 
 void usercontrol(void) {
+
+  Controller1.ButtonA.pressed(ToggleBlock);
+
   robot.set_coordinates(0,0,0);
 
   // User control code here, inside the loop
   while (1) {
+
     //Replace this line with robot.control_tank(); for tank drive 
-    robot.control_arcade(0.5);
+    robot.control_arcade(0.6);
     
     Controller1.Screen.print(robot.get_X_position());
     Controller1.Screen.print(" ");
@@ -194,7 +165,7 @@ void usercontrol(void) {
     Controller1.Screen.newLine();
 
     if(Controller1.ButtonR1.pressing()){
-      PunchMotor.spin(reverse, 10.5, volt);
+      PunchMotor.spin(reverse, 9, volt); //was 10.5
     }
     else{
       PunchMotor.stop();
@@ -221,11 +192,11 @@ void usercontrol(void) {
       Wings.set(false);
     }
 
-    if(Controller1.ButtonA.pressing())
-    {
-      Climb.set(true);
-    }else{
+    if (Controller1.ButtonB.pressing()){
       Climb.set(false);
+    }
+    else {
+      Climb.set(true);
     }
     
     wait(20, msec); // Sleep the task for a short amount of time to
@@ -247,6 +218,6 @@ int main() {
   }
 }
 
-void ToggleClimb(){
-  Climb.set(!Climb.value());
+void ToggleBlock(){
+  Blocker.set(!Blocker.value());
 }
