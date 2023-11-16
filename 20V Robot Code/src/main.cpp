@@ -103,12 +103,15 @@ void pre_auton(void) {
         Brain.Screen.printAt(50, 50, AUTO8);
         break;
     }
-    if(Brain.Screen.pressing() || Controller1.ButtonA.pressing()){
+
+    if (Brain.Screen.pressing() || Controller1.ButtonA.pressing()){
       while(Brain.Screen.pressing() || Controller1.ButtonA.pressing()) {}
       current_auton_selection ++;
-    } else if (current_auton_selection == 8){
+    } 
+    else if (current_auton_selection == 8){
       current_auton_selection = 0;
     }
+
     task::sleep(100);
   }
 }
@@ -156,14 +159,11 @@ void usercontrol(void) {
   // User control code here, inside the loop
   while (1) {
 
+    //Drive function call
     //Replace this line with robot.control_tank(); for tank drive 
     robot.control_arcade(0.6);
     
-    Controller1.Screen.print(robot.get_X_position());
-    Controller1.Screen.print(" ");
-    Controller1.Screen.print(robot.get_Y_position());
-    Controller1.Screen.newLine();
-
+    //Punch Catapult Code
     if(Controller1.ButtonR1.pressing()){
       PunchMotor.spin(reverse, 9, volt); //was 10.5
     }
@@ -192,6 +192,7 @@ void usercontrol(void) {
       Wings.set(false);
     }
 
+    //Pneumatic Climb
     if (Controller1.ButtonB.pressing()){
       Climb.set(false);
     }
@@ -199,6 +200,11 @@ void usercontrol(void) {
       Climb.set(true);
     }
     
+    Controller1.Screen.print(robot.get_X_position());
+    Controller1.Screen.print(" ");
+    Controller1.Screen.print(robot.get_Y_position());
+    Controller1.Screen.newLine();
+
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
   }
