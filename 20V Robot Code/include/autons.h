@@ -27,16 +27,19 @@ void DrawAuto4();
 void Close_Score_Desc_Touch();
 void DrawAuto5();
 
-#define AUTO6 "Far Score 4-5"
-void Far_Score();
+#define AUTO6 "Far Score 5"
+void Far_Score_5();
 void DrawAuto6();
 
 #define AUTO7 "Far Score 2-Touch"
 void Far_Score_Touch();
 void DrawAuto7();
 
-#define AUTO8 "Do Nothing"
+#define AUTO8 "Far Score 4"
 void Sit();
+
+#define AUTO9 "Far score 4"
+void Far_Score_4();
 
 void Far_Score_MidS();
 void TestA();

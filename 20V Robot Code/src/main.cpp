@@ -121,7 +121,7 @@ void autonomous(void) {
   switch(current_auton_selection){  
     case 0:
       //Skills();
-      Far_Score();
+      Far_Score_4();
       //Far_Score_Touch();
       //Close_Mid_Score();
       //Close_Score_Desc_Touch();
@@ -139,20 +139,20 @@ void autonomous(void) {
       Close_Score_Desc_Touch();
       break;
     case 5:
-      Far_Score();
+      Far_Score_5();
       break;
     case 6:
       Far_Score_Touch();
       break;
     case 7:
-      Sit();
+      Far_Score_4();
       break;
   }
 }
 
 void usercontrol(void) {
 
-  Controller1.ButtonA.pressed(ToggleBlock);
+  Controller1.ButtonB.pressed(ToggleBlock);
 
   robot.set_coordinates(0,0,0);
 
@@ -165,7 +165,7 @@ void usercontrol(void) {
     
     //Punch Catapult Code
     if(Controller1.ButtonR1.pressing()){
-      PunchMotor.spin(reverse, 9, volt); //was 10.5
+      PunchMotor.spin(reverse, 9.5, volt); //was 10.5
     }
     else{
       PunchMotor.stop();
@@ -193,11 +193,11 @@ void usercontrol(void) {
     }
 
     //Pneumatic Climb
-    if (Controller1.ButtonB.pressing()){
-      Climb.set(false);
+    if (Controller1.ButtonDown.pressing()){
+      Climb.set(true);
     }
     else {
-      Climb.set(true);
+      Climb.set(false);
     }
     
     Controller1.Screen.print(robot.get_X_position());

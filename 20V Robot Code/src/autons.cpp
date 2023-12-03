@@ -19,10 +19,10 @@ void Skills(){
   robot.drive_distance(15,0);
   robot.turn_to_angle(65,7);
   robot.drive_distance(-15, robot.get_absolute_heading(), 13, 13, robot.drive_settle_error, robot.drive_settle_time, 900);
-  PunchMotor.spin(reverse, 100, percent);
+  PunchMotor.spin(reverse, 9.5, volt);
   
   //delay for shooting time, then stop puncher to draw less current
-  wait(42,seconds);     
+  wait(42,seconds);   //was 42  
   PunchMotor.stop();
   
   //Cross barrier and score, then reverse
@@ -36,6 +36,14 @@ void Skills(){
   Intake.spin(reverse,100,percent);
   robot.drive_distance(40,90,13,13,robot.drive_settle_error,robot.drive_settle_time,3000);
   robot.drive_distance(-30);
+  Wings.set(false);
+  robot.turn_to_angle(270,12);
+  robot.drive_distance(20,270,12,12);
+  robot.turn_to_angle(90,12);
+  Wings.set(true);
+  robot.drive_distance(35,90,12,12);
+  robot.drive_distance(-30);
+
 }
 
 //Mid rush to move one triball in mid over the barrier and knock the other, then score preload laying on ground
@@ -120,7 +128,7 @@ void Far_Score_MidS(){
 }
 
 //score 4-5 triballs in goal. No descore. !MAY GO OVER AUTON LINE, FINISH DEBUGGING!
-void Far_Score(){
+void Far_Score_5(){
 
   //Odom and setup things (this auton goes faster than all others / p is lower)
   robot.set_drive_constants(12, 4, 0, 20, 0);
@@ -129,57 +137,123 @@ void Far_Score(){
 
   //get under-bar triball and return to origin
   Intake.spin(forward,100,percent);
-  robot.drive_distance(20,270);
+  robot.drive_distance(21,270,7,7);//was 23
+  wait(0.3,seconds);
   robot.drive_to_point(0, 0,12,12);
-  Intake.stop();
+  //Intake.stop();
 
   //score preload
   robot.swing_speed_scalar(-44, 180, 12, 0.5, true);
-  robot.turn_to_angle(180);
+  robot.turn_to_angle(180,12);
   robot.drive_distance(-13,180,12,12,robot.drive_settle_error,0,700);
 
   //score ball in intake
-  robot.drive_distance(4);
-  robot.turn_to_angle(0);
+  robot.drive_distance(7,180,12,12);
+  robot.turn_to_angle(0,12);
   Intake.spin(reverse,100,percent);
-  wait(0.5,seconds);
+  wait(0.3,seconds);
  
   //give them a little tap
-  robot.drive_distance(4,0,12,12,robot.drive_settle_error,robot.drive_settle_time,300);
-  robot.drive_distance(-6);
   Intake.stop();
+  robot.drive_distance(7,0,12,12,robot.drive_settle_error,robot.drive_settle_time,300);
+  robot.drive_distance(-6,0,12,12);
+ 
 
   //go for first mid triball
-  robot.turn_to_angle(270);
+  robot.turn_to_angle(270,12);
   Intake.spin(forward,100,percent);
   robot.drive_distance(52,290);
 
   //spit the triball twoards goal
   robot.drive_distance(-12);
-  robot.turn_to_angle(40);
-  Intake.spin(reverse,63,percent);
-  wait(0.5,seconds);
+  robot.turn_to_angle(58,12);//was 63
+  Intake.spin(reverse,100,percent); //was 63
+  wait(0.3,seconds);
   Intake.stop();
 
   //go for second mid triball
   Intake.spin(forward,100,percent);
-  robot.drive_distance(28,355,7,7);
+  robot.drive_distance(29,350,7,7); //was 30,355
 
-  //score both
-  robot.turn_to_angle(90);
+  //robot.set_turn_constants(12, .8, 0, 10, 15);
+  //robot.set_turn_constants(12, 2, 0, 10, robot.turn_starti);
+  //robot.set_turn_exit_conditions(4, 100, 1300);
+
+  //shoot second to goal
+  robot.turn_to_angle(90,12);
   Intake.spin(reverse,100,percent);
-  Wings.set(true);
-  robot.drive_distance(21);
-  Wings.set(false);
+  wait(0.25,seconds);
+  Intake.stop();
 
   //go and score last triball
-  robot.turn_to_angle(270);
+  robot.turn_to_angle(270,12);
   Intake.spin(forward,100,percent);
-  robot.drive_distance(23,270,12,12);
-  robot.turn_to_angle(90);
+  robot.drive_distance(15,270,12,12);
+  robot.turn_to_angle(90,12);
   Intake.spin(reverse,100,percent);
   Wings.set(true);
-  robot.drive_distance(23,90,12,12);
+  robot.drive_distance(26,90,12,12);
+  robot.drive_distance(-6,0,12,12);
+
+}
+
+void Far_Score_4(){
+
+  //Odom and setup things (this auton goes faster than all others / p is lower)
+  robot.set_drive_constants(12, 4, 0, 20, 0);
+  robot.set_coordinates(0, 0, 270);
+  robot.set_drive_exit_conditions(1.5, 0, 1000);
+
+  //get under-bar triball and return to origin
+  Intake.spin(forward,100,percent);
+  robot.drive_distance(19,270,6,6);//was 23
+  wait(0.4,seconds);
+  robot.drive_to_point(0, 0,12,12);
+  //Intake.stop();
+
+  //score preload
+  robot.swing_speed_scalar(-44, 180, 12, 0.5, true);
+  robot.turn_to_angle(180,12);
+  robot.drive_distance(-13,180,12,12,robot.drive_settle_error,0,700);
+
+  //score ball in intake
+  robot.drive_distance(7,180,12,12);
+  robot.turn_to_angle(0,12);
+  Intake.spin(reverse,100,percent);
+  wait(0.4,seconds);
+ 
+  //give them a little tap
+  Intake.stop();
+  robot.drive_distance(7,0,12,12,robot.drive_settle_error,robot.drive_settle_time,300);
+  robot.drive_distance(-6,0,12,12);
+ 
+
+  //go for first mid triball
+  robot.turn_to_angle(270,12);
+  Intake.spin(forward,100,percent);
+  robot.drive_distance(52,285);
+
+  //spit the triball twoards goal
+  robot.drive_distance(-12);
+  robot.turn_to_angle(59,12);//was 63
+  Intake.spin(reverse,100,percent); //was 63
+  wait(0.8,seconds);
+  Intake.stop();
+
+  //go for second mid triball
+  Intake.spin(forward,100,percent);
+  robot.drive_distance(32,344,6,6); //was 30,355
+  wait(0.8,seconds);
+
+  robot.turn_to_angle(90,12);
+  Intake.spin(reverse,100,percent);
+  Wings.set(true);
+  robot.drive_distance(16,90,12,12);
+  robot.drive_distance(-10,90,12,12);
+  Intake.stop();
+  robot.drive_distance(15,90,12,12);
+    robot.drive_distance(-10,90,12,12);
+
 
 }
 
@@ -250,7 +324,7 @@ void Close_Score_Desc_Touch(){
   //go touch
   robot.drive_distance(26, 90, 11, 5);
   Wings.set(true);
-  robot.drive_distance(23.5);
+  robot.drive_distance(22);
 
 }
 
