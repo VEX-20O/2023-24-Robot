@@ -25,9 +25,7 @@ using namespace vex;
 competition Competition;
 
 
-addressable_led addrled(Brain.ThreeWirePort.A, 64 );
-// local storage for some pixel data
-uint32_t data[addressable_led::MAX_LEDS];
+
 
 
 // define your global instances of motors and other devices here
@@ -77,6 +75,9 @@ void autonomous(void) {
 /*---------------------------------------------------------------------------*/
 
 void usercontrol(void) {
+  uint32_t data[addressable_led::MAX_LEDS];
+  addressable_led addrled(Brain.ThreeWirePort.A, 64 );
+  
   // User control code here, inside the loop
   // set all led black
     // probably need some initial delay, TBD
@@ -127,6 +128,7 @@ void usercontrol(void) {
         // Allow other tasks to run
         this_thread::sleep_for(10);
     }
+    
 
 }
 
@@ -134,6 +136,9 @@ void usercontrol(void) {
 // Main will set up the competition functions and callbacks.
 //
 int main() {
+  
+// local storage for some pixel data
+
   // Set up callbacks for autonomous and driver control periods.
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);

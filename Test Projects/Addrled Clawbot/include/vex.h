@@ -7,6 +7,7 @@
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 //
+#pragma once
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,6 +17,7 @@
 #include "v5.h"
 #include "v5_vcs.h"
 
+#include "addrled.h"
 #include "robot-config.h"
 
 #define waitUntil(condition)                                                   \
