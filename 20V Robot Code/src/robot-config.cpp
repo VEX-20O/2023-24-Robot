@@ -22,7 +22,7 @@ motor PunchMotor = motor(PORT5, ratio18_1, false);
 signature Vision21__GO = signature (1, -4871, -2153, -3512, -8903, -6401, -7652, 2.5, 0);
 vision Vision21 = vision (PORT21, 62, Vision21__GO);
 /*vex-vision-config:end*/
-motor Intake = motor(PORT4, ratio18_1, true);
+motor Intake = motor(PORT4, ratio18_1, false);
 digital_out Blocker = digital_out(Brain.ThreeWirePort.G);
 digital_out Climb = digital_out(Brain.ThreeWirePort.E);
 

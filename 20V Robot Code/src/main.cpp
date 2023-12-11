@@ -120,8 +120,8 @@ void autonomous(void) {
   auto_started = true;
   switch(current_auton_selection){  
     case 0:
-      //Skills();
-      Far_Score_4();
+      Skills();
+      //Far_Score_4();
       //Far_Score_Touch();
       //Close_Mid_Score();
       //Close_Score_Desc_Touch();
