@@ -20,7 +20,6 @@
 #include "vex.h"
 #include <string>
 #include "sylib/sylib.hpp"
-#include "ledcontrol.cpp"
 
 using namespace vex;
 competition Competition;
@@ -64,16 +63,10 @@ float INTAKEVAL = 200.0;
 
 void ToggleBlock();
 
-ledcontrol robotleds;
-
 void pre_auton(void) {
 
   sylib::initialize();
-  auto BackLights = sylib::Addrled(22, 1, 42);
-  auto BottomBack = sylib::Addrled(22, 2, 42);
-  auto FrontLights = sylib::Addrled(22, 3, 42);
-  auto BottomFront = sylib::Addrled(22, 4, 42);
-  robotleds.defineleds(BackLights, BottomBack, FrontLights, BottomFront);
+
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   default_constants();
@@ -196,6 +189,11 @@ void autonomous(void) {
 }
 
 void usercontrol(void) {
+  
+  auto BackLights = sylib::Addrled(22, 1, 42);
+  auto BottomBack = sylib::Addrled(22, 2, 42);
+  auto FrontLights = sylib::Addrled(22, 3, 42);
+  auto BottomFront = sylib::Addrled(22, 4, 42);
 
   auto_started == true;
 
@@ -203,22 +201,52 @@ void usercontrol(void) {
 
   robot.set_coordinates(0,0,0);
 
-  robotleds.clear();
-
-  robotleds.setall(LEDRED);
+  BackLights.clear();
+  BottomBack.clear();
+  FrontLights.clear();
+  BottomFront.clear();
+  BackLights.set_all(LEDRED);
+  BottomBack.set_all(LEDRED);
+  FrontLights.set_all(LEDRED);
+  BottomFront.set_all(LEDRED);
+  
 
   // User control code here, inside the loop
   while (1) {
 
     if(IDistance.objectDistance(mm) < INTAKEVAL && !isIntake){
       isIntake = true;
-      robotleds.clear();
-      robotleds.setall(LEDGREEN);
+      BackLights.clear();
+      BottomBack.clear();
+      FrontLights.clear();
+      BottomFront.clear();
+      /*
+      BackLights.set_all(0xE62169);
+      BottomBack.set_all(0xE62169);
+      FrontLights.set_all(0xE62169);
+      BottomFront.set_all(0xE62169);
+      */
+      BackLights.set_all(LEDGREEN);
+      BottomBack.set_all(LEDGREEN);
+      FrontLights.set_all(LEDGREEN);
+      BottomFront.set_all(LEDGREEN);
     }
     else if (IDistance.objectDistance(mm) > INTAKEVAL && isIntake){
       isIntake = false;
-      robotleds.clear();
-      robotleds.setall(LEDRED);
+      /*
+      BackLights.set_all(sylib::Addrled::rgb_to_hex(0 , 255, 255));
+      BottomBack.set_all(sylib::Addrled::rgb_to_hex(0 , 255, 255));
+      FrontLights.set_all(sylib::Addrled::rgb_to_hex(0 , 255, 255));
+      BottomFront.set_all(sylib::Addrled::rgb_to_hex(0, 255, 255));
+      */
+      BackLights.clear();
+      BottomBack.clear();
+      FrontLights.clear();
+      BottomFront.clear();
+      BackLights.set_all(LEDRED);
+      BottomBack.set_all(LEDRED);
+      FrontLights.set_all(LEDRED);
+      BottomFront.set_all(LEDRED);
     }
 
     //Drive function call
@@ -236,6 +264,9 @@ void usercontrol(void) {
     //Intake Code
     if(Controller1.ButtonR2.pressing()){
       Intake.spin(forward,100,percent);
+      if(IDistance.objectDistance(mm) < INTAKEVAL){
+        Intake.spin(forward);
+      }
     }
     else if(Controller1.ButtonL2.pressing()){
       Intake.spin(reverse,100,percent);
@@ -267,7 +298,7 @@ void usercontrol(void) {
     Controller1.Screen.print(robot.get_Y_position());
     Controller1.Screen.newLine();
 
-    vex::wait(20, msec); // Sleep the task for a short amount of time to
+    wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
   }
 }
@@ -282,7 +313,7 @@ int main() {
 
   // Prevent main from exiting with an infinite loop.
   while (true) {
-    vex::wait(100, msec);
+    wait(100, msec);
   }
 }
 
