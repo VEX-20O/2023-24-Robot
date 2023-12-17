@@ -54,13 +54,6 @@ int current_auton_selection = 0;
 bool auto_started = false;
 bool isIntake = false;
 
-#define LEDRED 0xFE0202
-#define LEDBLUE 0x02AAFE
-#define LEDMAGENTA 0xE62169
-#define LEDGREEN 0x56FE02
-
-float INTAKEVAL = 200.0;
-
 void ToggleBlock();
 
 void pre_auton(void) {
@@ -210,11 +203,10 @@ void usercontrol(void) {
   FrontLights.set_all(LEDRED);
   BottomFront.set_all(LEDRED);
   
-
   // User control code here, inside the loop
   while (1) {
 
-    if(IDistance.objectDistance(mm) < INTAKEVAL && !isIntake){
+    if(IDistance.objectDistance(mm) < INTAKEDISTANCECONST && !isIntake){
       isIntake = true;
       BackLights.clear();
       BottomBack.clear();
@@ -231,7 +223,7 @@ void usercontrol(void) {
       FrontLights.set_all(LEDGREEN);
       BottomFront.set_all(LEDGREEN);
     }
-    else if (IDistance.objectDistance(mm) > INTAKEVAL && isIntake){
+    else if (IDistance.objectDistance(mm) > INTAKEDISTANCECONST && isIntake){
       isIntake = false;
       /*
       BackLights.set_all(sylib::Addrled::rgb_to_hex(0 , 255, 255));
@@ -251,11 +243,11 @@ void usercontrol(void) {
 
     //Drive function call
     //Replace this line with robot.control_tank(); for tank drive 
-    robot.control_arcade(0.6);
+    robot.control_arcade(ARCADETURNINGCONST);
     
     //Punch Catapult Code
     if(Controller1.ButtonR1.pressing()){
-      PunchMotor.spin(reverse, 9.5, volt); //was 10.5
+      PunchMotor.spin(reverse, PUNCHERVOLTAGECONST, volt); //was 10.5
     }
     else{
       PunchMotor.stop();
@@ -263,13 +255,13 @@ void usercontrol(void) {
 
     //Intake Code
     if(Controller1.ButtonR2.pressing()){
-      Intake.spin(forward,100,percent);
-      if(IDistance.objectDistance(mm) < INTAKEVAL){
-        Intake.spin(forward);
+      Intake.spin(forward,INTAKESPEEDFWDCONST,percent);
+      if(IDistance.objectDistance(mm) < INTAKEDISTANCECONST){
+        Intake.spin(forward, INTAKESPEEDIDLECONST, percent);
       }
     }
     else if(Controller1.ButtonL2.pressing()){
-      Intake.spin(reverse,100,percent);
+      Intake.spin(reverse,INTAKESPEEDREVCONST,percent);
     }
     else if (!isIntake){
       Intake.stop();
@@ -279,7 +271,7 @@ void usercontrol(void) {
     if(Controller1.ButtonL1.pressing())
     {
       Wings.set(true);
-      Intake.spin(reverse,100,percent);
+      Intake.spin(reverse,INTAKESPEEDREVCONST,percent);
     }
     else {
       Wings.set(false);
