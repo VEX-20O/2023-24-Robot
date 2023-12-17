@@ -1,4 +1,2 @@
 # Reseda Regents Robotics VEX 20V's 2023-24 Over Under Code!
-#### Using the VEX VSCODE Extension // VEXCODE PRO
-
-### Documentation coming soon!
+#### Currently using the VSCODE VEX Extension. Earlier commits used VEXCODE V5, PROS, and VEXCODE PRO. 
