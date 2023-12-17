@@ -19,6 +19,8 @@
 
 #include "vex.h"
 #include <string>
+#include "sylib/sylib.hpp"
+#include "ledcontrol.cpp"
 
 using namespace vex;
 competition Competition;
@@ -51,14 +53,46 @@ PORT11,
 
 int current_auton_selection = 0;
 bool auto_started = false;
+bool isIntake = false;
+
+#define LEDRED 0xFE0202
+#define LEDBLUE 0x02AAFE
+#define LEDMAGENTA 0xE62169
+#define LEDGREEN 0x56FE02
+
+float INTAKEVAL = 200.0;
 
 void ToggleBlock();
 
+ledcontrol robotleds;
+
 void pre_auton(void) {
+
+  sylib::initialize();
+  auto BackLights = sylib::Addrled(22, 1, 42);
+  auto BottomBack = sylib::Addrled(22, 2, 42);
+  auto FrontLights = sylib::Addrled(22, 3, 42);
+  auto BottomFront = sylib::Addrled(22, 4, 42);
+  robotleds.defineleds(BackLights, BottomBack, FrontLights, BottomFront);
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   default_constants();
+/*
+  auto BackLights = sylib::Addrled(22, 1, 42);
+  auto BottomBack = sylib::Addrled(22, 2, 42);
+  auto FrontLights = sylib::Addrled(22, 3, 42);
+  auto BottomFront = sylib::Addrled(22, 4, 42);
+  auto colors = std::vector<std::uint32_t>();
+  colors.resize(42);
+  for(int i = 0; i < colors.size(); i++){
+    colors[i] = sylib::Addrled::rgb_to_hex(i*30 , 1, 0.25);
+  }
 
+  BackLights.set_buffer(colors);
+  BottomBack.set_buffer(colors);
+  FrontLights.set_buffer(colors);
+  BottomFront.set_buffer(colors);
+*/
   while(auto_started == false){            //Changing the names below will only change their names on the
     Brain.Screen.clearScreen();            //brain screen for auton selection.
     Controller1.Screen.clearLine();
@@ -111,9 +145,20 @@ void pre_auton(void) {
     else if (current_auton_selection == 8){
       current_auton_selection = 0;
     }
-
+/*
+    BackLights.rotate(1, false);
+    BottomBack.rotate(1, false);
+    FrontLights.rotate(1, false);
+    BottomFront.rotate(1, false);
+*/
     task::sleep(100);
   }
+/*
+    BackLights.clear();
+    BottomBack.clear();
+    FrontLights.clear();
+    BottomFront.clear();
+*/
 }
 
 void autonomous(void) {
@@ -152,12 +197,29 @@ void autonomous(void) {
 
 void usercontrol(void) {
 
+  auto_started == true;
+
   Controller1.ButtonB.pressed(ToggleBlock);
 
   robot.set_coordinates(0,0,0);
 
+  robotleds.clear();
+
+  robotleds.setall(LEDRED);
+
   // User control code here, inside the loop
   while (1) {
+
+    if(IDistance.objectDistance(mm) < INTAKEVAL && !isIntake){
+      isIntake = true;
+      robotleds.clear();
+      robotleds.setall(LEDGREEN);
+    }
+    else if (IDistance.objectDistance(mm) > INTAKEVAL && isIntake){
+      isIntake = false;
+      robotleds.clear();
+      robotleds.setall(LEDRED);
+    }
 
     //Drive function call
     //Replace this line with robot.control_tank(); for tank drive 
@@ -178,7 +240,7 @@ void usercontrol(void) {
     else if(Controller1.ButtonL2.pressing()){
       Intake.spin(reverse,100,percent);
     }
-    else{
+    else if (!isIntake){
       Intake.stop();
     }
     
@@ -205,7 +267,7 @@ void usercontrol(void) {
     Controller1.Screen.print(robot.get_Y_position());
     Controller1.Screen.newLine();
 
-    wait(20, msec); // Sleep the task for a short amount of time to
+    vex::wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
   }
 }
@@ -220,7 +282,7 @@ int main() {
 
   // Prevent main from exiting with an infinite loop.
   while (true) {
-    wait(100, msec);
+    vex::wait(100, msec);
   }
 }
 

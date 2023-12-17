@@ -10,21 +10,22 @@ brain  Brain;
 // VEXcode device constructors
 motor DriveL1 = motor(PORT1, ratio6_1, true);
 motor DriveL2 = motor(PORT2, ratio6_1, true);
-motor DriveL3 = motor(PORT3, ratio6_1, true);
+motor DriveL3 = motor(PORT4, ratio6_1, true);
 motor DriveR1 = motor(PORT9, ratio6_1, false);
 motor DriveR2 = motor(PORT8, ratio6_1, false);
 motor DriveR3 = motor(PORT10, ratio6_1, false);
-inertial Inertial11 = inertial(PORT11);
+inertial Inertial11 = inertial(PORT5);
 controller Controller1 = controller(primary);
-digital_out Wings = digital_out(Brain.ThreeWirePort.H);
-motor PunchMotor = motor(PORT5, ratio18_1, false);
+motor PunchMotor = motor(PORT3, ratio18_1, false);
 /*vex-vision-config:begin*/
 signature Vision21__GO = signature (1, -4871, -2153, -3512, -8903, -6401, -7652, 2.5, 0);
 vision Vision21 = vision (PORT21, 62, Vision21__GO);
 /*vex-vision-config:end*/
-motor Intake = motor(PORT4, ratio18_1, false);
-digital_out Blocker = digital_out(Brain.ThreeWirePort.G);
+motor Intake = motor(PORT7, ratio18_1, false);
+digital_out Blocker = digital_out(Brain.ThreeWirePort.F);
 digital_out Climb = digital_out(Brain.ThreeWirePort.E);
+digital_out Wings = digital_out(Brain.ThreeWirePort.G);
+distance IDistance = distance(PORT6);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

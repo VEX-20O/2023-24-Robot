@@ -324,6 +324,10 @@ void Drive::control_arcade(float turningspeedratio){
   float turn = deadband(controller(primary).Axis1.value(), 5);
   DriveL.spin(fwd, to_volt(throttle+turn*turningspeedratio), volt);
   DriveR.spin(fwd, to_volt(throttle-turn*turningspeedratio), volt);
+  if(throttle == 0 && turn==0){
+    DriveL.stop(brake);
+    DriveR.stop(brake);
+  }
 }
 
 void Drive::control_tank(){
