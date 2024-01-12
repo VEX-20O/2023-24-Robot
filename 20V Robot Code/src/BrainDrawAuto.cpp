@@ -1,5 +1,7 @@
 #include "vex.h"
 
+
+
 //Brain Screen is 480x272 pixels, origin is top left
 
 //starting bottom x coord, side length, color, starting bottom y coord

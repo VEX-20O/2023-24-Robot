@@ -24,6 +24,156 @@
 using namespace vex;
 competition Competition;
 
+int autonomousSelection = 0;
+bool ledtoggle = true;
+bool side = false;
+
+typedef struct _button {
+    int    xpos;
+    int    ypos;
+    int    width;
+    int    height;
+    bool   state;
+    vex::color offColor;
+    vex::color onColor;
+    const char *label;
+} button;
+
+// Button array definitions for each software button. The purpose of each button data structure
+// is defined above.  The array size can be extended, so you can have as many buttons as you 
+// wish as long as it fits.
+button buttons[] = {
+    {   30,  30, 60, 60,  false, 0x404040, 0x404040, "Auton Next" },
+    {  150,  30, 60, 60,  false, 0x303030, 0xD0D0D0, "Auton Off" },
+ //   {  270,  30, 60, 60,  false, 0x303030, 0xF700FF, "Park" },
+  //  {  390,  30, 60, 60,  false, 0x303030, 0xDDDD00, "Shoot" },
+    {   30, 150, 60, 60,  false, 0xE00000, 0x0000E0, "Switch Side" },
+    {  150, 150, 60, 60,  true, 0x404040, 0xC0C0C0, "LED Toggle" },
+ //   {  270, 150, 60, 60,  false, 0x404040, 0xC0C0C0, "6-" },
+ //   {  390, 150, 60, 60,  false, 0x404040, 0xC0C0C0, "7-" }
+};
+
+// forward ref
+void displayButtonControls( int index, bool pressed );
+
+/*-----------------------------------------------------------------------------*/
+/** @brief      Check if touch is inside button                                */
+/*-----------------------------------------------------------------------------*/
+int
+findButton(  int16_t xpos, int16_t ypos ) {
+    int nButtons = sizeof(buttons) / sizeof(button);
+
+    for( int index=0;index < nButtons;index++) {
+      button *pButton = &buttons[ index ];
+      if( xpos < pButton->xpos || xpos > (pButton->xpos + pButton->width) )
+        continue;
+
+      if( ypos < pButton->ypos || ypos > (pButton->ypos + pButton->height) )
+        continue;
+
+      return(index);
+    }
+    return (-1);
+}
+
+/*-----------------------------------------------------------------------------*/
+/** @brief      Init button states                                             */
+/*-----------------------------------------------------------------------------*/
+void
+initButtons() {
+    int nButtons = sizeof(buttons) / sizeof(button);
+
+    for( int index=0;index < nButtons;index++) {
+      buttons[index].state = false;
+    }
+}
+
+/*-----------------------------------------------------------------------------*/
+/** @brief      Screen has been touched                                        */
+/*-----------------------------------------------------------------------------*/
+void
+userTouchCallbackPressed() {
+    int index;
+    int xpos = Brain.Screen.xPosition();
+    int ypos = Brain.Screen.yPosition();
+
+    if( (index = findButton( xpos, ypos )) >= 0 ) {
+      displayButtonControls( index, true );
+    }
+
+}
+
+/*-----------------------------------------------------------------------------*/
+/** @brief      Screen has been (un)touched                                    */
+/*-----------------------------------------------------------------------------*/
+void
+userTouchCallbackReleased() {
+    int index;
+    int xpos = Brain.Screen.xPosition();
+    int ypos = Brain.Screen.yPosition();
+
+    if( (index = findButton( xpos, ypos )) >= 0 ) {
+      // clear all buttons to false, ie. unselected
+      //      initButtons(); 
+
+      // now set this one as true
+      if( buttons[index].state == true) {
+        buttons[index].state = false; 
+      }
+      else    {
+        buttons[index].state = true;
+      }
+
+      // save as auton selection
+      if(index == 0){
+        if(autonomousSelection == 8){
+          autonomousSelection=1;
+        }
+        else{autonomousSelection++;}
+      }
+
+      
+      Brain.Screen.printAt(100,100,"a");
+
+      displayButtonControls( index, false );
+    }
+
+}
+
+/*-----------------------------------------------------------------------------*/
+/** @brief      Draw all buttons                                               */
+/*-----------------------------------------------------------------------------*/
+void
+displayButtonControls( int index, bool pressed ) {
+    vex::color c;
+    Brain.Screen.setPenColor( vex::color(0xe0e0e0) );
+
+    for(int i=0;i<sizeof(buttons)/sizeof(button);i++) {
+
+      if( buttons[i].state )
+        c = buttons[i].onColor;
+      else
+        c = buttons[i].offColor;
+
+      Brain.Screen.setFillColor( c );
+
+      // button fill
+      if( i == index && pressed == true ) {
+        Brain.Screen.drawRectangle( buttons[i].xpos, buttons[i].ypos, buttons[i].width, buttons[i].height, c );
+      }
+      else
+        Brain.Screen.drawRectangle( buttons[i].xpos, buttons[i].ypos, buttons[i].width, buttons[i].height );
+
+      // outline
+      Brain.Screen.drawRectangle( buttons[i].xpos, buttons[i].ypos, buttons[i].width, buttons[i].height, vex::color::transparent );
+
+// draw label
+      if(  buttons[i].label != NULL )   
+        Brain.Screen.setFillColor(black);                                          //was 8
+        Brain.Screen.printAt( buttons[i].xpos + 8, buttons[i].ypos + buttons[i].height + 8, buttons[i].label );
+    }
+}
+
 Drive robot(
 
 ZERO_TRACKER_ODOM, 
@@ -63,22 +213,56 @@ void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   default_constants();
-/*
+
   auto BackLights = sylib::Addrled(22, 1, 42);
   auto BottomBack = sylib::Addrled(22, 2, 42);
   auto FrontLights = sylib::Addrled(22, 3, 42);
   auto BottomFront = sylib::Addrled(22, 4, 42);
-  auto colors = std::vector<std::uint32_t>();
-  colors.resize(42);
-  for(int i = 0; i < colors.size(); i++){
-    colors[i] = sylib::Addrled::rgb_to_hex(i*30 , 1, 0.25);
+  BackLights.clear();
+  BottomBack.clear();
+  FrontLights.clear();
+  BottomFront.clear();
+  BackLights.set_all(LEDRED);
+  BottomBack.set_all(LEDRED);
+  FrontLights.set_all(LEDRED);
+  BottomFront.set_all(LEDRED);
+
+/*
+  while(auto_started==false){
+    
+    side = buttons[2].state;
+    ledtoggle = buttons[3].state;
+
+    if(!ledtoggle){
+      BottomFront.turn_off();
+      FrontLights.turn_off();
+      BottomFront.turn_off();
+      BottomBack.turn_off();
+    }
+    else{
+      BottomFront.turn_on();
+      FrontLights.turn_on();
+      BottomFront.turn_on();
+      BottomBack.turn_on();
+    }
+    if(side==false){
+      BackLights.set_all(LEDRED);
+      BottomBack.set_all(LEDRED);
+      FrontLights.set_all(LEDRED);
+      BottomFront.set_all(LEDRED);
+    }
+    else{
+      BackLights.set_all(LEDBLUE);
+      BottomBack.set_all(LEDBLUE);
+      FrontLights.set_all(LEDBLUE);
+      BottomFront.set_all(LEDBLUE);
+    }
+    this_thread::sleep_for(10);
   }
 
-  BackLights.set_buffer(colors);
-  BottomBack.set_buffer(colors);
-  FrontLights.set_buffer(colors);
-  BottomFront.set_buffer(colors);
-*/
+  this_thread::sleep_for(10);
+
+/*
   while(auto_started == false){            //Changing the names below will only change their names on the
     Brain.Screen.clearScreen();            //brain screen for auton selection.
     Controller1.Screen.clearLine();
@@ -131,31 +315,18 @@ void pre_auton(void) {
     else if (current_auton_selection == 8){
       current_auton_selection = 0;
     }
-/*
-    BackLights.rotate(1, false);
-    BottomBack.rotate(1, false);
-    FrontLights.rotate(1, false);
-    BottomFront.rotate(1, false);
-*/
+
     task::sleep(100);
   }
-/*
-    BackLights.clear();
-    BottomBack.clear();
-    FrontLights.clear();
-    BottomFront.clear();
 */
 }
+
 
 void autonomous(void) {
   auto_started = true;
   switch(current_auton_selection){  
     case 0:
       Skills();
-      //Far_Score_4();
-      //Far_Score_Touch();
-      //Close_Mid_Score();
-      //Close_Score_Desc_Touch();
       break;     
     case 1:        
       Close_Desc_Mid();
@@ -202,6 +373,13 @@ void usercontrol(void) {
   BottomBack.set_all(LEDRED);
   FrontLights.set_all(LEDRED);
   BottomFront.set_all(LEDRED);
+
+  if(!ledtoggle){
+    BottomFront.turn_off();
+    FrontLights.turn_off();
+    BottomFront.turn_off();
+    BottomBack.turn_off();
+  }
   
   // User control code here, inside the loop
   while (1) {
@@ -296,17 +474,79 @@ void usercontrol(void) {
 }
 
 int main() {
-  // Set up callbacks for autonomous and driver control periods.
-  Competition.autonomous(autonomous);
-  Competition.drivercontrol(usercontrol);
 
-  // Run the pre-autonomous function.
-  pre_auton();
+    //Run the pre-autonomous function. 
+    pre_auton();
 
-  // Prevent main from exiting with an infinite loop.
-  while (true) {
-    wait(100, msec);
-  }
+    //Set up callbacks for autonomous and driver control periods.
+    Competition.autonomous( autonomous );
+    Competition.drivercontrol( usercontrol );
+
+    // register events for button selection
+    Brain.Screen.pressed( userTouchCallbackPressed );
+    Brain.Screen.released( userTouchCallbackReleased );
+
+    // make nice background
+    Brain.Screen.setFillColor( vex::color(0x404040) );
+    Brain.Screen.setPenColor( vex::color(0x404040) );
+    Brain.Screen.drawRectangle( 0, 0, 480, 120 );
+
+    auto BackLights = sylib::Addrled(22, 1, 42);
+    auto BottomBack = sylib::Addrled(22, 2, 42);
+    auto FrontLights = sylib::Addrled(22, 3, 42);
+    auto BottomFront = sylib::Addrled(22, 4, 42);
+    BackLights.clear();
+    BottomBack.clear();
+    FrontLights.clear();
+    BottomFront.clear();
+    BackLights.set_all(LEDRED);
+    BottomBack.set_all(LEDRED);
+    FrontLights.set_all(LEDRED);
+    BottomFront.set_all(LEDRED);
+
+    // initial display
+    displayButtonControls( 0, false );
+
+    while(1) {
+        // Allow other tasks to run
+        if( !Competition.isEnabled() )
+        Brain.Screen.setFont(fontType::mono40);
+        Brain.Screen.setFillColor( vex::color(0xFFFFFF) );
+
+        Brain.Screen.setPenColor( vex::color(0xc11f27));
+        Brain.Screen.printAt( 0,  135, "  Regents Robotics 20V  " );
+
+
+        side = buttons[2].state;
+        ledtoggle = buttons[3].state;
+
+        if(!ledtoggle){
+          BottomFront.turn_off();
+          FrontLights.turn_off();
+          BottomFront.turn_off();
+          BottomBack.turn_off();
+        }
+        else{
+          BottomFront.turn_on();
+          FrontLights.turn_on();
+          BottomFront.turn_on();
+          BottomBack.turn_on();
+        }
+    if(side==false){
+      BackLights.set_all(LEDRED);
+      BottomBack.set_all(LEDRED);
+      FrontLights.set_all(LEDRED);
+      BottomFront.set_all(LEDRED);
+    }
+    else{
+      BackLights.set_all(LEDMAGENTA);
+      BottomBack.set_all(LEDBLUE2);
+      FrontLights.set_all(LEDBLUE2);
+      BottomFront.set_all(LEDBLUE2);
+    }
+
+        this_thread::sleep_for(10);
+    }
 }
 
 void ToggleBlock(){
