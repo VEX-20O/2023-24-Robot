@@ -25,6 +25,7 @@ using namespace vex;
 competition Competition;
 
 int autonomousSelection = 0;
+bool autonenabeld = true;
 bool ledtoggle = true;
 bool side = false;
 
@@ -124,16 +125,61 @@ userTouchCallbackReleased() {
         buttons[index].state = true;
       }
 
+
       // save as auton selection
       if(index == 0){
+        
         if(autonomousSelection == 8){
           autonomousSelection=1;
         }
         else{autonomousSelection++;}
+        
+        switch(autonomousSelection){       //Tap the brain screen to cycle through autons.
+      case 0:
+        Controller1.Screen.print(AUTO1);
+        Brain.Screen.printAt(300, 100, AUTO1);
+       // DrawAuto1();
+        break;
+      case 1:
+        Controller1.Screen.print(AUTO2);
+        Brain.Screen.printAt(300, 100, AUTO2);
+       // DrawAuto2();
+        break;
+      case 2:
+        Controller1.Screen.print(AUTO3);
+        Brain.Screen.printAt(300, 100, AUTO3);
+        //DrawAuto3();
+        break;
+      case 3:
+        Controller1.Screen.print(AUTO4);
+        Brain.Screen.printAt(300, 100, AUTO4);
+         // DrawAuto4();
+        break;
+      case 4:
+        Controller1.Screen.print(AUTO5);
+        Brain.Screen.printAt(300, 100, AUTO5);
+        //DrawAuto5();
+        break;
+      case 5:
+        Controller1.Screen.print(AUTO6);
+        Brain.Screen.printAt(300, 100, AUTO6);
+        //DrawAuto6();
+        break;
+      case 6:
+        Controller1.Screen.print(AUTO7);
+        Brain.Screen.printAt(300, 100, AUTO7);
+        //DrawAuto7();
+        break;
+      case 7:
+        Controller1.Screen.print(AUTO8);
+        Brain.Screen.printAt(300, 100, AUTO8);
+        break;
+    }
+
       }
 
       
-      Brain.Screen.printAt(100,100,"a");
+      
 
       displayButtonControls( index, false );
     }
@@ -324,7 +370,7 @@ void pre_auton(void) {
 
 void autonomous(void) {
   auto_started = true;
-  switch(current_auton_selection){  
+  switch(autonomousSelection){  
     case 0:
       Skills();
       break;     
@@ -489,7 +535,7 @@ int main() {
     // make nice background
     Brain.Screen.setFillColor( vex::color(0x404040) );
     Brain.Screen.setPenColor( vex::color(0x404040) );
-    Brain.Screen.drawRectangle( 0, 0, 480, 120 );
+    Brain.Screen.drawRectangle( 0, 0, 480, 240 );
 
     auto BackLights = sylib::Addrled(22, 1, 42);
     auto BottomBack = sylib::Addrled(22, 2, 42);
@@ -509,8 +555,9 @@ int main() {
 
     while(1) {
         // Allow other tasks to run
-        if( !Competition.isEnabled() )
-        Brain.Screen.setFont(fontType::mono40);
+        if( !Competition.isEnabled() && !auto_started  ){
+        
+        Brain.Screen.setFont(fontType::mono20);
         Brain.Screen.setFillColor( vex::color(0xFFFFFF) );
 
         Brain.Screen.setPenColor( vex::color(0xc11f27));
@@ -521,6 +568,10 @@ int main() {
         ledtoggle = buttons[3].state;
 
         if(!ledtoggle){
+          BackLights.clear();
+          BottomBack.clear();
+          FrontLights.clear();
+          BottomFront.clear();
           BottomFront.turn_off();
           FrontLights.turn_off();
           BottomFront.turn_off();
@@ -532,20 +583,24 @@ int main() {
           BottomFront.turn_on();
           BottomBack.turn_on();
         }
-    if(side==false){
+
+    if(side==false && ledtoggle){
       BackLights.set_all(LEDRED);
       BottomBack.set_all(LEDRED);
       FrontLights.set_all(LEDRED);
       BottomFront.set_all(LEDRED);
     }
-    else{
-      BackLights.set_all(LEDMAGENTA);
+    else if (ledtoggle){
+      BackLights.set_all(LEDBLUE2);
       BottomBack.set_all(LEDBLUE2);
       FrontLights.set_all(LEDBLUE2);
       BottomFront.set_all(LEDBLUE2);
     }
 
+    autonenabeld = buttons[1].state;
+
         this_thread::sleep_for(10);
+    }
     }
 }
 
