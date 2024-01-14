@@ -560,6 +560,7 @@ int main() {
     Brain.Screen.drawRectangle( 0, 0, 480, 240 );
 
     auto BackLights = sylib::Addrled(22, 1, 42);
+    
     auto BottomBack = sylib::Addrled(22, 2, 42);
     auto FrontLights = sylib::Addrled(22, 3, 42);
     auto BottomFront = sylib::Addrled(22, 4, 42);
@@ -571,7 +572,7 @@ int main() {
     BottomBack.set_all(LEDRED);
     FrontLights.set_all(LEDRED);
     BottomFront.set_all(LEDRED);
-    
+
     Controller1.Screen.print(AUTO1);
         Brain.Screen.printAt(300, 100, AUTO1);
 
