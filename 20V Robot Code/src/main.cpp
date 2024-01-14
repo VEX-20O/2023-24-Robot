@@ -128,13 +128,15 @@ userTouchCallbackReleased() {
 
       // save as auton selection
       if(index == 0){
-        
+        autonomousSelection++;
         if(autonomousSelection == 8){
-          autonomousSelection=1;
+          autonomousSelection=0;
         }
-        else{autonomousSelection++;}
         
         switch(autonomousSelection){       //Tap the brain screen to cycle through autons.
+      if(index==1){
+        autonomousSelection=7;
+      }
       case 0:
         Controller1.Screen.print(AUTO1);
         Brain.Screen.printAt(300, 100, AUTO1);
@@ -246,7 +248,6 @@ PORT11,
 4
 );
 
-int current_auton_selection = 0;
 bool auto_started = false;
 bool isIntake = false;
 
@@ -415,12 +416,23 @@ void usercontrol(void) {
   BottomBack.clear();
   FrontLights.clear();
   BottomFront.clear();
-  BackLights.set_all(LEDRED);
-  BottomBack.set_all(LEDRED);
-  FrontLights.set_all(LEDRED);
-  BottomFront.set_all(LEDRED);
-
+  if(side==false && ledtoggle){
+      BackLights.set_all(LEDRED);
+      BottomBack.set_all(LEDRED);
+      FrontLights.set_all(LEDRED);
+      BottomFront.set_all(LEDRED);
+    }
+    else if (ledtoggle){
+      BackLights.set_all(LEDBLUE2);
+      BottomBack.set_all(LEDBLUE2);
+      FrontLights.set_all(LEDBLUE2);
+      BottomFront.set_all(LEDBLUE2);
+    }
   if(!ledtoggle){
+    BackLights.clear();
+    BottomBack.clear();
+    FrontLights.clear();
+    BottomFront.clear();
     BottomFront.turn_off();
     FrontLights.turn_off();
     BottomFront.turn_off();
@@ -442,10 +454,12 @@ void usercontrol(void) {
       FrontLights.set_all(0xE62169);
       BottomFront.set_all(0xE62169);
       */
+     if (ledtoggle){
       BackLights.set_all(LEDGREEN);
       BottomBack.set_all(LEDGREEN);
       FrontLights.set_all(LEDGREEN);
       BottomFront.set_all(LEDGREEN);
+     }
     }
     else if (IDistance.objectDistance(mm) > INTAKEDISTANCECONST && isIntake){
       isIntake = false;
@@ -459,10 +473,18 @@ void usercontrol(void) {
       BottomBack.clear();
       FrontLights.clear();
       BottomFront.clear();
+      if(side==false && ledtoggle){
       BackLights.set_all(LEDRED);
       BottomBack.set_all(LEDRED);
       FrontLights.set_all(LEDRED);
       BottomFront.set_all(LEDRED);
+    }
+    else if (ledtoggle){
+      BackLights.set_all(LEDBLUE2);
+      BottomBack.set_all(LEDBLUE2);
+      FrontLights.set_all(LEDBLUE2);
+      BottomFront.set_all(LEDBLUE2);
+    }
     }
 
     //Drive function call
@@ -549,6 +571,9 @@ int main() {
     BottomBack.set_all(LEDRED);
     FrontLights.set_all(LEDRED);
     BottomFront.set_all(LEDRED);
+    
+    Controller1.Screen.print(AUTO1);
+        Brain.Screen.printAt(300, 100, AUTO1);
 
     // initial display
     displayButtonControls( 0, false );
