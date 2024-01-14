@@ -24,6 +24,8 @@
 using namespace vex;
 competition Competition;
 
+
+
 Drive robot(
 
 ZERO_TRACKER_ODOM, 
@@ -34,7 +36,7 @@ motor_group(DriveL1,DriveL2,DriveL3),
 motor_group(DriveR1,DriveR2,DriveR3),
 
 //PORT NUMBER of inertial
-PORT11,
+PORT15,
 
 //Wheel Dia
 3.25,
