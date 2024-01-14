@@ -125,7 +125,6 @@ userTouchCallbackReleased() {
         buttons[index].state = true;
       }
 
-
       // save as auton selection
       if(index == 0){
         autonomousSelection++;
@@ -463,28 +462,19 @@ void usercontrol(void) {
     }
     else if (IDistance.objectDistance(mm) > INTAKEDISTANCECONST && isIntake){
       isIntake = false;
-      /*
-      BackLights.set_all(sylib::Addrled::rgb_to_hex(0 , 255, 255));
-      BottomBack.set_all(sylib::Addrled::rgb_to_hex(0 , 255, 255));
-      FrontLights.set_all(sylib::Addrled::rgb_to_hex(0 , 255, 255));
-      BottomFront.set_all(sylib::Addrled::rgb_to_hex(0, 255, 255));
-      */
+
       BackLights.clear();
       BottomBack.clear();
       FrontLights.clear();
       BottomFront.clear();
-      if(side==false && ledtoggle){
+
+   
       BackLights.set_all(LEDRED);
       BottomBack.set_all(LEDRED);
       FrontLights.set_all(LEDRED);
       BottomFront.set_all(LEDRED);
-    }
-    else if (ledtoggle){
-      BackLights.set_all(LEDBLUE2);
-      BottomBack.set_all(LEDBLUE2);
-      FrontLights.set_all(LEDBLUE2);
-      BottomFront.set_all(LEDBLUE2);
-    }
+      
+      
     }
 
     //Drive function call
@@ -560,7 +550,7 @@ int main() {
     Brain.Screen.drawRectangle( 0, 0, 480, 240 );
 
     auto BackLights = sylib::Addrled(22, 1, 42);
-    
+
     auto BottomBack = sylib::Addrled(22, 2, 42);
     auto FrontLights = sylib::Addrled(22, 3, 42);
     auto BottomFront = sylib::Addrled(22, 4, 42);
